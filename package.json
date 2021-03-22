@@ -6,7 +6,7 @@
  "scripts": {
   "client": "cd client && npm start",
   "server": "cd server && npm start",
-  "start" : "concurrently --kill-others \"npm run server\" \"npm run client\""
+  "start": "concurrently --kill-others \"npm run server\" \"npm run client\""
  },
  "keywords": [],
  "author": "Oktarian Tilney-Bassett, Joschua Mueller",
@@ -14,5 +14,5 @@
  "devDependencies": {
   "concurrently": "3.5.1"
  },
- "homepage": "https://github.com/OktarianTB/visitado#readme",
+ "homepage": "https://github.com/OktarianTB/visitado#readme"
 }
