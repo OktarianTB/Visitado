@@ -1,9 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Box, Container } from "@material-ui/core/";
+import { Container } from "@material-ui/core/";
+import { withRouter } from "react-router-dom";
 
-import Copyright from "./Copyright";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Layout = ({ Page }) => {
+const Layout = ({ Page, location }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -37,18 +37,19 @@ const Layout = ({ Page }) => {
     <div className={classes.root}>
       <CssBaseline />
       <Navbar handleDrawerOpen={handleDrawerOpen} open={open} />
-      <Sidebar handleDrawerClose={handleDrawerClose} open={open} />
+      <Sidebar
+        handleDrawerClose={handleDrawerClose}
+        open={open}
+        path={location.pathname}
+      />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Page />
-          <Box pt={4}>
-            <Copyright />
-          </Box>
         </Container>
       </main>
     </div>
   );
 };
 
-export default Layout;
+export default withRouter(Layout);

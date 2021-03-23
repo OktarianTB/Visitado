@@ -12,6 +12,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from "@material-ui/icons/Add";
 
 const drawerWidth = 220;
 
@@ -97,6 +98,7 @@ const Navbar = ({ open, handleDrawerOpen }) => {
         <NavbarIcon open={open} handleDrawerOpen={handleDrawerOpen} />
         <Title />
         <SearchBar />
+        <Add />
         <Notifications />
       </Toolbar>
     </AppBar>
@@ -152,6 +154,14 @@ const SearchBar = () => {
         inputProps={{ "aria-label": "search" }}
       />
     </div>
+  );
+};
+
+const Add = () => {
+  return (
+    <IconButton color="inherit">
+      <AddIcon />
+    </IconButton>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link, useLocation } from "react-router-dom";
 import {
   Drawer,
   List,
@@ -80,34 +81,61 @@ const Sidebar = ({ open, handleDrawerClose }) => {
 };
 
 const DrawerMenu = () => {
+  const path = useLocation().pathname;
+  console.log(path);
   return (
     <div>
       <List>
-        <ListItem button>
+        <ListItem
+          button
+          component={Link}
+          to="/"
+          style={{ backgroundColor: path === "/" ? "#e0e0e0" : "" }}
+        >
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button>
+        <ListItem
+          button
+          component={Link}
+          to="/profile"
+          style={{ backgroundColor: path === "/profile" ? "#e0e0e0" : "" }}
+        >
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
           <ListItemText primary="Profile" />
         </ListItem>
-        <ListItem button>
+        <ListItem
+          button
+          component={Link}
+          to="/explore"
+          style={{ backgroundColor: path === "/explore" ? "#e0e0e0" : "" }}
+        >
           <ListItemIcon>
             <ExploreIcon />
           </ListItemIcon>
           <ListItemText primary="Explore" />
         </ListItem>
-        <ListItem button>
+        <ListItem
+          button
+          component={Link}
+          to="/badges"
+          style={{ backgroundColor: path === "/badges" ? "#e0e0e0" : "" }}
+        >
           <ListItemIcon>
             <EmojiEventsIcon />
           </ListItemIcon>
           <ListItemText primary="Badges" />
         </ListItem>
-        <ListItem button>
+        <ListItem
+          button
+          component={Link}
+          to="/favorites"
+          style={{ backgroundColor: path === "/favorites" ? "#e0e0e0" : "" }}
+        >
           <ListItemIcon>
             <FavoriteIcon />
           </ListItemIcon>
@@ -116,7 +144,12 @@ const DrawerMenu = () => {
       </List>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem
+          button
+          component={Link}
+          to="/settings"
+          style={{ backgroundColor: path === "/settings" ? "#e0e0e0" : "" }}
+        >
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
