@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core/";
 import styles from "./Badges.module.css";
 import Layout from "../Layout/Layout";
+import useWindowDimensions from "../../Utils/WindowSize";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -21,12 +22,27 @@ const Badges = () => {
   return <Layout Page={Page} />;
 };
 
+const getNumBadges = (width) => {
+  let num = 4;
+  if (width < 900) num = 1;
+  else if (width < 1200) num = 2;
+  else if (width < 1400) num = 3;
+  return num;
+};
+
 const Page = () => {
+  const { width } = useWindowDimensions();
   const [location, setLocation] = useState("Hong Kong");
+  const [badgesOnScreen, setBadgesOnScreen] = useState(getNumBadges(width));
 
   const handleChange = (event) => {
     setLocation(event.target.value);
   };
+
+  useEffect(() => {
+    console.log(width, getNumBadges(width));
+    setBadgesOnScreen(getNumBadges(width));
+  }, [width]);
 
   return (
     <div className={styles.main}>
@@ -54,33 +70,95 @@ const Page = () => {
           </MenuItem>
         </Select>
       </FormControl>
-      <Carousel />
+      <Carousel badgesOnScreen={badgesOnScreen} />
 
       <Typography variant="h4" component="h4">
         World
       </Typography>
-      <Carousel />
+      <Carousel badgesOnScreen={badgesOnScreen} />
+      <br />
+      <Typography variant="caption" display="block" gutterBottom align="center">
+        Icons made by{" "}
+        <a href="https://www.freepik.com" title="Freepik">
+          Freepik
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://www.flaticon.com/authors/smashicons"
+          title="Smashicons"
+        >
+          Smashicons
+        </a>{" "}
+        from{" "}
+        <a href="https://www.flaticon.com/" title="Flaticon">
+          Flaticon
+        </a>
+        .
+      </Typography>
     </div>
   );
 };
 
-const Carousel = () => {
+const Carousel = ({ badgesOnScreen }) => {
   const [index, setIndex] = useState(0);
   const numBadges = 6;
   const badgeList = [
-    { title: "Hikes", completed: "0", total: "22" },
-    { title: "Skyscrapers", completed: "5", total: "5" },
-    { title: "Monuments", completed: "3", total: "3" },
-    { title: "Food", completed: "1", total: "3" },
-    { title: "Transport", completed: "0", total: "13" },
-    { title: "Activities", completed: "10", total: "12" },
+    {
+      title: "Hikes",
+      completed: "0",
+      total: "22",
+      image: "hiking.png",
+      backgroundColor: "red",
+    },
+    {
+      title: "Skyscrapers",
+      completed: "5",
+      total: "5",
+      image: "skyscrapers.png",
+      backgroundColor: "red",
+    },
+    {
+      title: "Monuments",
+      completed: "3",
+      total: "3",
+      image: "ship.png",
+      backgroundColor: "red",
+    },
+    {
+      title: "Food",
+      completed: "1",
+      total: "3",
+      image: "noodles.png",
+      backgroundColor: "red",
+    },
+    {
+      title: "Transport",
+      completed: "0",
+      total: "13",
+      image: "train.png",
+      backgroundColor: "red",
+    },
+    {
+      title: "Activities",
+      completed: "10",
+      total: "12",
+      image: "laugh.png",
+      backgroundColor: "red",
+    },
   ];
-  const [currentBadges, setCurrentBadges] = useState([
-    badgeList[0],
-    badgeList[1],
-    badgeList[2],
-    badgeList[3],
-  ]);
+
+  const [currentBadges, setCurrentBadges] = useState(
+    badgeList.slice(0, badgesOnScreen)
+  );
+
+  useEffect(() => {
+    let newBadges = [];
+    for (var i = index; i < index + badgesOnScreen; i++) {
+      newBadges.push(badgeList[i % numBadges]);
+    }
+    setCurrentBadges(newBadges);
+    // eslint-disable-next-line
+  }, [badgesOnScreen]);
 
   const clickArrow = (direction) => {
     const increment = direction === "left" ? -1 : 1;
@@ -88,10 +166,10 @@ const Carousel = () => {
     setIndex(newIndex);
 
     let newBadges = [];
-    for (var i = newIndex; i < newIndex + 4; i++) {
+    for (var i = newIndex; i < newIndex + badgesOnScreen; i++) {
       newBadges.push(badgeList[i % numBadges]);
     }
-    
+
     setCurrentBadges(newBadges);
   };
 
@@ -112,6 +190,8 @@ const Carousel = () => {
             title={badge.title}
             completed={badge.completed}
             total={badge.total}
+            image={badge.image}
+            backgroundColor={badge.backgroundColor}
           />
         ))}
 
@@ -127,15 +207,16 @@ const Carousel = () => {
   );
 };
 
-const Badge = ({ title, completed, total }) => {
+const Badge = ({ title, completed, total, image, backgroundColor }) => {
   return (
     <Card className={styles.card}>
       <CardActionArea>
         <CardMedia
           className={styles.media}
-          image="https://source.unsplash.com/random/800x600"
-          title="Image"
-        />
+          style={{ backgroundColor: "#eeeeee" }}
+        >
+          <img src={image} className={styles.badgeImage} alt={title} />
+        </CardMedia>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
             {title}

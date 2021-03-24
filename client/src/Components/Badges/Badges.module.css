@@ -8,7 +8,15 @@
 }
 
 .media {
-  height: 200px;
+  height: 230px;
+}
+
+.badgeImage {
+  max-width: 90%;
+  max-height: 90%;
+  display: block;
+  margin: 0 auto;
+  padding-top: 10%;
 }
 
 .carousel {
