@@ -1,14 +1,14 @@
-import React from "react";
-import clsx from "clsx";
+import React, { useState, useEffect } from "react";
 import {
-  Grid,
   Typography,
   CardActionArea,
   Card,
   CardMedia,
   CardContent,
   IconButton,
-  Paper,
+  MenuItem,
+  Select,
+  FormControl,
 } from "@material-ui/core/";
 import styles from "./Badges.module.css";
 import Layout from "../Layout/Layout";
@@ -22,32 +22,104 @@ const Badges = () => {
 };
 
 const Page = () => {
+  const [location, setLocation] = useState("Hong Kong");
+
+  const handleChange = (event) => {
+    setLocation(event.target.value);
+  };
+
   return (
     <div className={styles.main}>
-      <Carousel name="Hong Kong" />
-      <Carousel name="World" />
+      <FormControl variant="outlined">
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={location}
+          onChange={handleChange}
+        >
+          <MenuItem value={"Hong Kong"}>
+            <Typography variant="h4" component="h4">
+              Hong Kong
+            </Typography>
+          </MenuItem>
+          <MenuItem value={"France"}>
+            <Typography variant="h4" component="h4">
+              France
+            </Typography>
+          </MenuItem>
+          <MenuItem value={"United States"}>
+            <Typography variant="h4" component="h4">
+              United States
+            </Typography>
+          </MenuItem>
+        </Select>
+      </FormControl>
+      <Carousel />
+
+      <Typography variant="h4" component="h4">
+        World
+      </Typography>
+      <Carousel />
     </div>
   );
 };
 
-const Carousel = ({ name }) => {
+const Carousel = () => {
+  const [index, setIndex] = useState(0);
+  const numBadges = 6;
+  const badgeList = [
+    { title: "Hikes", completed: "0", total: "22" },
+    { title: "Skyscrapers", completed: "5", total: "5" },
+    { title: "Monuments", completed: "3", total: "3" },
+    { title: "Food", completed: "1", total: "3" },
+    { title: "Transport", completed: "0", total: "13" },
+    { title: "Activities", completed: "10", total: "12" },
+  ];
+  const [currentBadges, setCurrentBadges] = useState([
+    badgeList[0],
+    badgeList[1],
+    badgeList[2],
+    badgeList[3],
+  ]);
+
+  const clickArrow = (direction) => {
+    const increment = direction === "left" ? -1 : 1;
+    const newIndex = (index + increment + numBadges) % numBadges;
+    setIndex(newIndex);
+
+    let newBadges = [];
+    for (var i = newIndex; i < newIndex + 4; i++) {
+      newBadges.push(badgeList[i % numBadges]);
+    }
+    
+    setCurrentBadges(newBadges);
+  };
+
   return (
     <div>
-      <Typography variant="h4" component="h4">
-        {name}
-      </Typography>
-
       <div className={styles.carousel}>
-        <IconButton size="medium" color="inherit">
+        <IconButton
+          size="medium"
+          color="inherit"
+          onClick={() => clickArrow("left")}
+        >
           <ChevronLeftIcon />
         </IconButton>
 
-        <Badge title="Hikes" completed="0" total="22" />
-        <Badge title="Skyscrapers" completed="5" total="5" />
-        <Badge title="Monuments" completed="3" total="7" />
-        <Badge title="Food" completed="6" total="7" />
+        {currentBadges.map((badge) => (
+          <Badge
+            key={badge.title}
+            title={badge.title}
+            completed={badge.completed}
+            total={badge.total}
+          />
+        ))}
 
-        <IconButton size="medium" color="inherit">
+        <IconButton
+          size="medium"
+          color="inherit"
+          onClick={() => clickArrow("right")}
+        >
           <ChevronRightIcon />
         </IconButton>
       </div>
