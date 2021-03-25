@@ -1,0 +1,31 @@
+.main {
+  margin: 10px;
+  margin-top: 15px;
+}
+
+.breadcrumb {
+  text-decoration: none;
+  color: black;
+}
+
+.breadcrumb:hover {
+  text-decoration: underline;
+}
+
+.paper {
+  padding: 16px;
+  text-align: center;
+}
+
+.content {
+  margin-top: 35px;
+}
+
+.badgeImage {
+  max-width: 70%;
+  max-height: 70%;
+  display: block;
+  margin: 0 auto;
+  padding-top: 10%;
+  margin-bottom: 30px;
+}

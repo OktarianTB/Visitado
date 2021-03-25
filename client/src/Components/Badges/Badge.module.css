@@ -1,0 +1,15 @@
+.link {
+  text-decoration: none;
+}
+
+.badgeImage {
+  max-width: 90%;
+  max-height: 90%;
+  display: block;
+  margin: 0 auto;
+  padding-top: 10%;
+}
+
+.media {
+  height: 230px;
+}

@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import {
   Badges,
+  BadgesLocation,
+  BadgeContent,
   Explore,
   Home,
   NotFound,
@@ -18,6 +20,12 @@ const App = () => {
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/badges" exact component={Badges} />
+        <Route
+          path="/badges/hongkong/skyscrapers"
+          exact
+          component={BadgeContent}
+        />
+        <Route path="/badges/hongkong" exact component={BadgesLocation} />
         <Route path="/explore" exact component={Explore} />
         <Route path="/profile" exact component={Profile} />
         <Route path="/favorites" exact component={Favorites} />

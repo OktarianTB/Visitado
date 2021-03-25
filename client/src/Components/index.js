@@ -1,4 +1,6 @@
-export { default as Badges } from "./Badges/Badges";
+export { default as Badges } from "./Badges/BadgesMain";
+export { default as BadgesLocation } from "./Badges/BadgesLocation";
+export { default as BadgeContent } from "./Badges/BadgeContent";
 export { default as Explore } from "./Explore/Explore";
 export { default as Home } from "./Home/Home";
 export { default as NotFound } from "./NotFound/NotFound";

@@ -3,22 +3,6 @@
   margin-top: 15px;
 }
 
-.card {
-  width: 230px;
-}
-
-.media {
-  height: 230px;
-}
-
-.badgeImage {
-  max-width: 90%;
-  max-height: 90%;
-  display: block;
-  margin: 0 auto;
-  padding-top: 10%;
-}
-
 .carousel {
   display: flex;
   align-items: center;

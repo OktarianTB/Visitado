@@ -81,8 +81,7 @@ const Sidebar = ({ open, handleDrawerClose }) => {
 };
 
 const DrawerMenu = () => {
-  const path = useLocation().pathname;
-  console.log(path);
+  const path = useLocation().pathname.split("/")[1];
   return (
     <div>
       <List>
@@ -90,7 +89,7 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/"
-          style={{ backgroundColor: path === "/" ? "#e0e0e0" : "" }}
+          style={{ backgroundColor: path === "" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>
             <HomeIcon />
@@ -101,7 +100,7 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/profile"
-          style={{ backgroundColor: path === "/profile" ? "#e0e0e0" : "" }}
+          style={{ backgroundColor: path === "profile" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>
             <AccountCircleIcon />
@@ -112,7 +111,7 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/explore"
-          style={{ backgroundColor: path === "/explore" ? "#e0e0e0" : "" }}
+          style={{ backgroundColor: path === "explore" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>
             <ExploreIcon />
@@ -123,7 +122,7 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/badges"
-          style={{ backgroundColor: path === "/badges" ? "#e0e0e0" : "" }}
+          style={{ backgroundColor: path === "badges" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>
             <EmojiEventsIcon />
@@ -134,7 +133,7 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/favorites"
-          style={{ backgroundColor: path === "/favorites" ? "#e0e0e0" : "" }}
+          style={{ backgroundColor: path === "favorites" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>
             <FavoriteIcon />
@@ -148,7 +147,7 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/settings"
-          style={{ backgroundColor: path === "/settings" ? "#e0e0e0" : "" }}
+          style={{ backgroundColor: path === "settings" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>
             <SettingsIcon />
