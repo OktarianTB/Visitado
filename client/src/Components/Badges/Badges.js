@@ -161,7 +161,7 @@ const Carousel = ({ badgesOnScreen }) => {
   }, [badgesOnScreen]);
 
   const clickArrow = (direction) => {
-    const increment = direction === "left" ? -1 : 1;
+    const increment = direction === "right" ? -1 : 1;
     const newIndex = (index + increment + numBadges) % numBadges;
     setIndex(newIndex);
 
