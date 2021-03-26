@@ -1,0 +1,32 @@
+.main {
+  margin: 10px;
+  margin-top: 15px;
+}
+
+.content {
+  margin-top: 35px;
+}
+
+.paper {
+  padding: 24px;
+  text-align: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  max-width: 70%;
+  max-height: 70%;
+  display: block;
+  margin: 0 auto;
+  padding-top: 10%;
+  margin-bottom: 30px;
+}
+
+.badgeImage {
+  max-width: 80%;
+  max-height: 80%;
+  display: block;
+  margin: 0 auto;
+  padding-top: 10%;
+  margin-bottom: 20px;
+}
