@@ -65,6 +65,28 @@ const Page = () => {
                 fullWidth
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Location"
+                id="outlined-margin-normal"
+                margin="normal"
+                variant="outlined"
+                value="Hong Kong"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Biography"
+                id="outlined-margin-normal"
+                multiline
+                rows={3}
+                margin="normal"
+                variant="outlined"
+                value="Hi, I'm baby josch!"
+                fullWidth
+              />
+            </Grid>
           </Grid>
         </form>
         <Button

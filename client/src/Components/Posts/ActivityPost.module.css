@@ -1,0 +1,21 @@
+.paper {
+  margin-top: 20px;
+  padding: 24px;
+}
+
+.text {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.root {
+  display: flex;
+  justify-content: space-around;
+  overflow: hidden;
+}
+
+.gridList {
+  flex-wrap: nowrap !important;
+  transform: translateZ(0);
+}

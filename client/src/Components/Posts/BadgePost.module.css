@@ -1,0 +1,20 @@
+.paper {
+  margin-top: 20px;
+  padding: 24px;
+  text-align: center;
+  justify-content: center;
+}
+
+.badgeImage {
+  max-width: 100px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 0;
+  padding-top: 10%;
+}
+
+.text {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}

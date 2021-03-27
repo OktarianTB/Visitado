@@ -3,6 +3,8 @@ import { Grid, Typography, Paper, Divider } from "@material-ui/core/";
 import styles from "./Profile.module.css";
 import Layout from "../Layout/Layout";
 import MapContainer from "../Maps/Map";
+import BadgePost from "../Posts/BadgePost";
+import ActivityPost from "../Posts/ActivityPost";
 
 const Profile = () => {
   return <Layout Page={Page} />;
@@ -76,9 +78,13 @@ const Sidebar = () => {
 
 const Content = () => {
   return (
-    <Paper className={styles.paper}>
-      <MapContainer />
-    </Paper>
+    <div className={styles.contentDiv}>
+      <Paper className={styles.paper}>
+        <MapContainer />
+      </Paper>
+      <BadgePost />
+      <ActivityPost />
+    </div>
   );
 };
 
