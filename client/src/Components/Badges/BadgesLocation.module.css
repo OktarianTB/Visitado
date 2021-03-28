@@ -15,12 +15,3 @@
 .content {
   margin-top: 35px;
 }
-
-.carousel {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  margin-top: 40px;
-  margin-bottom: 40px;
-}
