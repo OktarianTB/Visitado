@@ -17,6 +17,11 @@ const NotFound = () => {
       <Typography variant="subtitle1" gutterBottom>
         Sorry, the page you are looking for does not exist.
       </Typography>
+      <br />
+      <br />
+      <Typography variant="h3" gutterBottom>
+        🥴
+      </Typography>
     </Grid>
   );
 };

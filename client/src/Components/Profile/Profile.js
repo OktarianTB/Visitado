@@ -80,7 +80,7 @@ const Content = () => {
   return (
     <div className={styles.contentDiv}>
       <Paper className={styles.paper}>
-        <MapContainer />
+        <MapContainer height={"60Vh"}/>
       </Paper>
       <BadgePost />
       <ActivityPost />

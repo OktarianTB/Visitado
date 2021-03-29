@@ -12,6 +12,7 @@ import {
   Settings,
   Login,
   Register,
+  AddActivity,
 } from "./Components";
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/profile" exact component={Profile} />
         <Route path="/favorites" exact component={Favorites} />
         <Route path="/settings" exact component={Settings} />
+        <Route path="/add-activity" exact component={AddActivity} />
         <Route path="/login" exact component={Login} />
         <Route path="/register" exact component={Register} />
         <Route component={NotFound} />

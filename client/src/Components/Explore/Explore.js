@@ -1,5 +1,8 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core/";
+import { Paper } from "@material-ui/core/";
+import styles from "./Explore.module.css";
+import MapContainer from "../Maps/Map";
+import useWindowDimensions from "../../Utils/WindowSize";
 
 import Layout from "../Layout/Layout";
 
@@ -8,12 +11,12 @@ const Explore = () => {
 };
 
 const Page = () => {
+  const { height } = useWindowDimensions();
+
   return (
-    <Grid container spacing={3}>
-      <Typography variant="h1" component="h2" gutterBottom>
-        EXPLORE
-      </Typography>
-    </Grid>
+    <Paper className={styles.paper}>
+      <MapContainer height={0.75 * height} />
+    </Paper>
   );
 };
 

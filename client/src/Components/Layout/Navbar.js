@@ -8,17 +8,12 @@ import {
   IconButton,
   Badge,
   InputBase,
-  MenuItem,
-  MenuList,
-  Grow,
-  Popper,
-  ClickAwayListener,
-  Paper,
 } from "@material-ui/core/";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import SearchIcon from "@material-ui/icons/Search";
 import AddIcon from "@material-ui/icons/Add";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 220;
 
@@ -164,70 +159,17 @@ const SearchBar = () => {
 };
 
 const AddMenu = () => {
-  const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
+  const history = useHistory();
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+  const redirectToPage = () => {
+    let path = "/add-activity";
+    history.push(path);
   };
-
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
 
   return (
-    <div>
-      <IconButton
-        color="inherit"
-        onClick={handleToggle}
-        ref={anchorRef}
-        aria-controls={open ? "menu-list-grow" : undefined}
-        aria-haspopup="true"
-      >
-        <AddIcon />
-      </IconButton>
-      <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === "bottom" ? "center top" : "center bottom",
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={handleClose}>
-                <MenuList autoFocusItem={open} id="menu-list-grow">
-                  <MenuItem onClick={handleClose}>Create New Post</MenuItem>
-                  <MenuItem onClick={handleClose}>Add New Location</MenuItem>
-                  <MenuItem onClick={handleClose}>Add New Activity</MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
-    </div>
+    <IconButton color="inherit" aria-haspopup="true" onClick={redirectToPage}>
+      <AddIcon />
+    </IconButton>
   );
 };
 

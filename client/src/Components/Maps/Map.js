@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Map.module.css";
 import mapboxgl from "mapbox-gl";
+import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoib2t0YXJpYW4iLCJhIjoiY2ttcTBtcDRkMHY0cjJ4cnY4d3NpNmxlMiJ9.tILyfF19GGlat3f44pEZRw";
@@ -70,7 +71,7 @@ const skyscrapers = {
   ],
 };
 
-const MapContainer = () => {
+const MapContainer = ({ height }) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
 
@@ -82,6 +83,14 @@ const MapContainer = () => {
       center: [114.1098795, 22.2976036],
       zoom: 9,
     });
+
+    // add geocoder search bar
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      })
+    );
 
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
@@ -104,6 +113,20 @@ const MapContainer = () => {
           },
         });
       });
+
+      map.on("click", sourceName, (e) => {
+        if (e.features.length) {
+          const feature = e.features[0];
+          // create popup node
+          const popupNode = document.createElement("div");
+          ReactDOM.render(<Popup feature={feature} />, popupNode);
+          // set popup on map
+          popUpRef.current
+            .setLngLat(feature.geometry.coordinates)
+            .setDOMContent(popupNode)
+            .addTo(map);
+        }
+      });
     };
 
     map.on("load", function () {
@@ -121,25 +144,17 @@ const MapContainer = () => {
       });
     });
 
-    map.on("click", "points1", (e) => {
-      if (e.features.length) {
-        const feature = e.features[0];
-        // create popup node
-        const popupNode = document.createElement("div");
-        ReactDOM.render(<Popup feature={feature} />, popupNode);
-        // set popup on map
-        popUpRef.current
-          .setLngLat(feature.geometry.coordinates)
-          .setDOMContent(popupNode)
-          .addTo(map);
-      }
-    });
-
     // clean up on unmount
     return () => map.remove();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <div className={styles.mapContainer} ref={mapContainerRef} />;
+  return (
+    <div
+      className={styles.mapContainer}
+      ref={mapContainerRef}
+      style={{ height, textAlign: "left" }}
+    />
+  );
 };
 
 const Popup = ({ feature }) => {
