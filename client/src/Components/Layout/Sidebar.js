@@ -15,7 +15,6 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import HomeIcon from "@material-ui/icons/Home";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExploreIcon from "@material-ui/icons/Explore";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import EmojiEventsIcon from "@material-ui/icons/EmojiEvents";
@@ -128,17 +127,6 @@ const DrawerMenu = () => {
             <EmojiEventsIcon />
           </ListItemIcon>
           <ListItemText primary="Badges" />
-        </ListItem>
-        <ListItem
-          button
-          component={Link}
-          to="/favorites"
-          style={{ backgroundColor: path === "favorites" ? "#e0e0e0" : "" }}
-        >
-          <ListItemIcon>
-            <FavoriteIcon />
-          </ListItemIcon>
-          <ListItemText primary="Favorites" />
         </ListItem>
       </List>
       <Divider />

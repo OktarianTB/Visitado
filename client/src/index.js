@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { createMuiTheme } from "@material-ui/core/styles";
+import { unstable_createMuiStrictModeTheme as createMuiTheme } from "@material-ui/core";
 import { ThemeProvider, Grow } from "@material-ui/core/";
 import { SnackbarProvider } from "notistack";
 
@@ -23,18 +23,18 @@ const theme = createMuiTheme({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        TransitionComponent={Grow}
-      >
-        <App />
-      </SnackbarProvider>
-    </ThemeProvider>
-  </React.StrictMode>,
+  <ThemeProvider theme={theme}>
+    <SnackbarProvider
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      TransitionComponent={Grow}
+    >
+      <React.StrictMode>
+        <App />{" "}
+      </React.StrictMode>
+    </SnackbarProvider>
+  </ThemeProvider>,
   document.getElementById("root")
 );

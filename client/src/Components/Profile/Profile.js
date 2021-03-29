@@ -33,7 +33,7 @@ const Sidebar = () => {
         Baby Josch
       </Typography>
       <Typography variant="h6" gutterBottom>
-        @baby_josch
+        @baby_josch ● 10 Friends
       </Typography>
       <br />
       <Typography variant="body2" display="block">
@@ -80,7 +80,7 @@ const Content = () => {
   return (
     <div className={styles.contentDiv}>
       <Paper className={styles.paper}>
-        <MapContainer height={"60Vh"}/>
+        <MapContainer height={"60Vh"} />
       </Paper>
       <BadgePost />
       <ActivityPost />

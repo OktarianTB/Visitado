@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import styles from "./Map.module.css";
 import mapboxgl from "mapbox-gl";
 import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import { Typography, Button } from "@material-ui/core";
+import { useSnackbar } from "notistack";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoib2t0YXJpYW4iLCJhIjoiY2ttcTBtcDRkMHY0cjJ4cnY4d3NpNmxlMiJ9.tILyfF19GGlat3f44pEZRw";
@@ -74,6 +76,7 @@ const skyscrapers = {
 const MapContainer = ({ height }) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
+  const { enqueueSnackbar } = useSnackbar();
 
   // initialize map when component mounts
   useEffect(() => {
@@ -85,12 +88,18 @@ const MapContainer = ({ height }) => {
     });
 
     // add geocoder search bar
-    map.addControl(
-      new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl,
-      })
-    );
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      mapboxgl: mapboxgl,
+      marker: false,
+      zoom: 13,
+    });
+
+    geocoder.on("result", (result) => {
+      console.log(result);
+    });
+
+    map.addControl(geocoder);
 
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
@@ -119,7 +128,10 @@ const MapContainer = ({ height }) => {
           const feature = e.features[0];
           // create popup node
           const popupNode = document.createElement("div");
-          ReactDOM.render(<Popup feature={feature} />, popupNode);
+          ReactDOM.render(
+            <Popup feature={feature} enqueueSnackbar={enqueueSnackbar} />,
+            popupNode
+          );
           // set popup on map
           popUpRef.current
             .setLngLat(feature.geometry.coordinates)
@@ -157,13 +169,25 @@ const MapContainer = ({ height }) => {
   );
 };
 
-const Popup = ({ feature }) => {
-  const { id, name, description } = feature.properties;
+const Popup = ({ feature, enqueueSnackbar }) => {
+  const { id, name } = feature.properties;
+
+  const addLocation = () => {
+    enqueueSnackbar(`Added ${name} to your locations!`, {
+      variant: "success",
+      preventDuplicate: true,
+      autoHideDuration: 2000,
+    });
+  };
 
   return (
-    <div id={`popup-${id}`}>
-      <h3>{name}</h3>
-      {description}
+    <div id={`popup-${id}`} className={styles.popup}>
+      <Typography variant="body1" gutterBottom>
+        {name}
+      </Typography>
+      <Button color="primary" size="small" onClick={addLocation}>
+        Add to Locations
+      </Button>
     </div>
   );
 };

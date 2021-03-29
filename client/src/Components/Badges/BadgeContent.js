@@ -17,6 +17,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styles from "./BadgeContent.module.css";
 import Layout from "../Layout/Layout";
 import Attribution from "./Attribution";
+import { useSnackbar } from "notistack";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
@@ -107,13 +108,34 @@ const Badges = () => {
   return (
     <div>
       {skyscrapers.map(({ label, url, text }) => (
-        <BadgeAccordion text={text} label={label} url={url} />
+        <BadgeAccordion text={text} label={label} url={url} key={label} />
       ))}
     </div>
   );
 };
 
 const BadgeAccordion = ({ label, text, url }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const validateBadge = (event) => {
+    console.log(event.target.checked);
+    event.stopPropagation();
+
+    if (event.target.checked) {
+      enqueueSnackbar(`New Badge Added: ${label}`, {
+        variant: "success",
+        preventDuplicate: true,
+        autoHideDuration: 2000,
+      });
+    } else {
+      enqueueSnackbar(`Badge Removed: ${label}`, {
+        variant: "default",
+        preventDuplicate: true,
+        autoHideDuration: 2000,
+      });
+    }
+  };
+
   return (
     <div>
       <Accordion>
@@ -125,7 +147,7 @@ const BadgeAccordion = ({ label, text, url }) => {
         >
           <FormControlLabel
             aria-label="Acknowledge"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => validateBadge(event)}
             onFocus={(event) => event.stopPropagation()}
             control={<Checkbox />}
             label={label}
