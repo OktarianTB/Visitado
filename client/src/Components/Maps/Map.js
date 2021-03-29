@@ -95,8 +95,29 @@ const MapContainer = ({ height }) => {
       zoom: 13,
     });
 
-    geocoder.on("result", (result) => {
-      console.log(result);
+    geocoder.on("result", (info) => {
+      console.log(info.result);
+
+      const marker = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: info.result.center,
+            },
+            properties: {
+              id: info.result.id,
+              name: info.result.text,
+              description: "IFC Tower",
+            },
+          },
+        ],
+      };
+
+      popUpRef.current.remove();
+      map.getSource("points3").setData(marker);
     });
 
     map.addControl(geocoder);
@@ -153,6 +174,12 @@ const MapContainer = ({ height }) => {
         data: skyscrapers,
         imageName: "marker2",
         sourceName: "points2",
+      });
+      AddMarkers({
+        imageUrl: "http://maps.google.com/mapfiles/ms/micons/green-dot.png",
+        data: {},
+        imageName: "marker3",
+        sourceName: "points3",
       });
     });
 
