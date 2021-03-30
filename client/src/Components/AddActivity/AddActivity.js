@@ -4,6 +4,7 @@ import styles from "./AddActivity.module.css";
 import CreateIcon from "@material-ui/icons/Create";
 import Layout from "../Layout/Layout";
 import SelectForm from "../Forms/SelectForm";
+import MapContainer from "../Maps/Map";
 
 const AddActivity = () => {
   return <Layout Page={Page} />;
@@ -37,7 +38,7 @@ const Page = () => {
             value={activity}
             handleChange={handleActivityChange}
             list={activities}
-            title="Activity"
+            title="Select Activity"
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -45,7 +46,7 @@ const Page = () => {
             value={badge}
             handleChange={handleBadgeChange}
             list={badges}
-            title="Badges"
+            title="Select Badge"
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -53,10 +54,16 @@ const Page = () => {
             value={badge}
             handleChange={handleBadgeChange}
             list={badges}
-            title="Location"
+            title="Select of my Locations"
           />
         </Grid>
       </Grid>
+      <Typography variant="subtitle1" align="center">
+        or add a location on the map
+      </Typography>
+      <br />
+      <MapContainer height={"30Vh"} />
+      <br />
       <TextField
         label="Post Title"
         id="outlined-margin-normal"
