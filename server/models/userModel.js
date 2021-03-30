@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-require("mongoose-type-email");
 
 const userSchema = new mongoose.Schema(
   {
@@ -10,11 +9,6 @@ const userSchema = new mongoose.Schema(
       minlength: [4, "Username must be 4-15 characters."],
       maxlength: [15, "Username must be 4-15 characters."],
       lowercase: true,
-    },
-    email: {
-      type: mongoose.SchemaTypes.Email,
-      required: [true, "Email is required."],
-      unique: [true, "An account with this email already exists."],
     },
     password: {
       type: String,
@@ -30,6 +24,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "Welcome to my page!",
       maxlength: 200,
+    },
+    picture_url: {
+      type: String,
+      default: "koala.png"
+    },
+    is_admin: {
+      type: Boolean,
+      default: false,
     },
   },
   {

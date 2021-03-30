@@ -1,14 +1,14 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const cors = require('cors');
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const cors = require("cors");
 
 // Setup environment variables
-dotenv.config({path: "./server/config/.env"})
+dotenv.config({ path: "./config/.env" });
 
 // Setup App
 const app = express();
@@ -17,27 +17,47 @@ const app = express();
 app.use(cors());
 
 // Setup Middleware
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 
+// Connecting to database
+const database = process.env.MONGO_URI.replace(
+  "<password>",
+  process.env.MONGO_PASSWORD
+);
+
+mongoose
+  .connect(database, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB Database!");
+  })
+  .catch((err) => console.log(err));
+
 // Setup Routes
-const usersRouter = require('./routes/users');
-app.use('/users', usersRouter);
+const usersRouter = require("./routes/userRoute");
+const authRouter = require("./routes/authRoute");
+
+app.use("/auth", authRouter);
+app.use("/user", usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+  next(createError(404, "This endpoint does not exist."));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // render the error page
+app.use(function (err, req, res, next) {
   res.status(err.status || 500).json({
     status: "fail",
-    message: err.message
-  })
+    message: err.message,
+  });
 });
 
 if (process.env.NODE_ENV === "production") {
