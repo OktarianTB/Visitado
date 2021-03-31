@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 
 const errorMessage = (next, message) => {
-  next(createError(400, message));
+  next(createError(401, message));
 };
 
 exports.registerUser = async (req, res, next) => {
@@ -44,7 +44,7 @@ exports.registerUser = async (req, res, next) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
@@ -66,7 +66,13 @@ exports.loginUser = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     return res.status(200).json({
       token,
-      user,
+      user: {
+        username: user.username,
+        displayName: user.displayName,
+        biography: user.biography,
+        picture_url: user.picture_url,
+        id: user._id,
+      },
     });
   } catch (error) {
     return errorMessage(next, error.message);
@@ -82,6 +88,7 @@ exports.validate = async (req, res) => {
     }
 
     const verified = jwt.verify(token, process.env.JWT_SECRET);
+    
     if (!verified) {
       return res.json(false);
     }

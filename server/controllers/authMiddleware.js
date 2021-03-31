@@ -8,6 +8,7 @@ const errorMessage = (next) => {
 const auth = async (req, res, next) => {
   try {
     const token = req.header("x-auth-token");
+    
     if (!token) {
       return errorMessage(next);
     }

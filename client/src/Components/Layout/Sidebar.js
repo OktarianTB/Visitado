@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+import UserContext from "../../Utils/UserContext";
 import { Link, useLocation } from "react-router-dom";
 import {
   Drawer,
@@ -81,6 +83,18 @@ const Sidebar = ({ open, handleDrawerClose }) => {
 
 const DrawerMenu = () => {
   const path = useLocation().pathname.split("/")[1];
+  const history = useHistory();
+  const { setUserData } = useContext(UserContext);
+
+  const logout = () => {
+    setUserData({
+      token: undefined,
+      user: undefined,
+    });
+    localStorage.setItem("auth-token", "");
+    history.push("/login");
+  };
+
   return (
     <div>
       <List>
@@ -142,7 +156,7 @@ const DrawerMenu = () => {
           </ListItemIcon>
           <ListItemText primary="Settings" />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={logout}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>

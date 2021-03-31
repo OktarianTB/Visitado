@@ -34,6 +34,29 @@ exports.getUser = async (req, res, next) => {
   }
 };
 
+exports.getFullUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return errorMessage(next, "This user does not exist.");
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        username: user.username,
+        displayName: user.displayName,
+        biography: user.biography,
+        picture_url: user.picture_url,
+        id: user._id
+      },
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
 exports.followUser = async (req, res, next) => {
   try {
     const { followUserId } = req.params;

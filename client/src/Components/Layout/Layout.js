@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { Container } from "@material-ui/core/";
 import { withRouter } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import UserContext from "../../Utils/UserContext";
 
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
@@ -25,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Layout = ({ Page, location, match }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const history = useHistory();
+  const [open, setOpen] = useState(true);
+  const { userData } = useContext(UserContext);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -33,7 +37,11 @@ const Layout = ({ Page, location, match }) => {
     setOpen(false);
   };
 
-  return (
+  if (!userData.user) {
+    history.push("/login");
+  }
+
+  return userData.user ? (
     <div className={classes.root}>
       <CssBaseline />
       <Navbar handleDrawerOpen={handleDrawerOpen} open={open} />
@@ -49,6 +57,8 @@ const Layout = ({ Page, location, match }) => {
         </Container>
       </main>
     </div>
+  ) : (
+    <div></div>
   );
 };
 
