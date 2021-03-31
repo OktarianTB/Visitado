@@ -11,9 +11,12 @@ import styles from "./Badge.module.css";
 
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
-const Badge = ({ title, completed, total, image, width }) => {
+const Badge = ({ title, image, url, width }) => {
+  const completed = 9;
+  const total = 10;
+
   return (
-    <Link to="/badges/hongkong/skyscrapers" className={styles.link}>
+    <Link to={url} className={styles.link}>
       <Card style={{ width }}>
         <CardActionArea>
           <CardMedia

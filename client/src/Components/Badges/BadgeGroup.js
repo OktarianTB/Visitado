@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Breadcrumbs,
@@ -8,22 +8,41 @@ import {
   CardMedia,
   CardContent,
 } from "@material-ui/core/";
-import styles from "./BadgesMain.module.css";
-import { Link } from "react-router-dom";
+import styles from "./BadgeGroup.module.css";
+import { Link, useHistory } from "react-router-dom";
 import Layout from "../Layout/Layout";
 import Attribution from "./Attribution";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import Axios from "axios";
 
-const Badges = () => {
+const BadgeGroup = () => {
   return <Layout Page={Page} />;
 };
 
 const Page = () => {
+  const history = useHistory();
+  const [badgeList, setBadgeList] = useState([]);
+
+  useEffect(() => {
+    const getBadgeList = async () => {
+      const url = `http://127.0.0.1:5000/badge/group`;
+      await Axios.get(url)
+        .then((response) => {
+          setBadgeList(response.data.data);
+        })
+        .catch(() => {
+          history.push("/404/");
+        });
+    };
+
+    getBadgeList();
+  }, []);
+
   return (
     <div className={styles.main}>
       <History />
       <br />
-      <Content />
+      <Content badgeList={badgeList} />
       <br />
       <br />
       <br />
@@ -47,14 +66,14 @@ const History = () => {
   );
 };
 
-const Content = () => {
+const Content = ({ badgeList }) => {
   return (
     <div className={styles.content}>
       <Grid container spacing={3}>
-        {badgeList.slice(0, 3).map(({ title, number, image }) => {
+        {badgeList.map(({ title, thumbnail, slug }) => {
           return (
             <Grid item xs={12} sm={4} key={title} style={{ marginBottom: 30 }}>
-              <Badge title={title} number={number} image={image} />
+              <Badge title={title} image={thumbnail} slug={slug} />
             </Grid>
           );
         })}
@@ -63,29 +82,22 @@ const Content = () => {
   );
 };
 
-const Badge = ({ title, number, image }) => {
+const Badge = ({ title, image, slug }) => {
+  const url = `/badges/${slug}/`;
+
   return (
-    <Link to="/badges/hongkong/" className={styles.link}>
+    <Link to={url} className={styles.link}>
       <Card style={{ maxWidth: 350 }}>
         <CardActionArea>
           <CardMedia
             className={styles.media}
             style={{ backgroundColor: "#eeeeee" }}
           >
-            <img src={image} className={styles.badgeImage} alt={title} />
+            <img src={`/${image}`} className={styles.badgeImage} alt={title} />
           </CardMedia>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2" align="center">
               {title}
-            </Typography>
-
-            <Typography
-              variant="subtitle1"
-              color="textSecondary"
-              component="p"
-              align="center"
-            >
-              {number} Badges Available
             </Typography>
           </CardContent>
         </CardActionArea>
@@ -94,22 +106,15 @@ const Badge = ({ title, number, image }) => {
   );
 };
 
-export default Badges;
+/*
+<Typography
+              variant="subtitle1"
+              color="textSecondary"
+              component="p"
+              align="center"
+            >
+              {number} Badges Available
+            </Typography>
+*/
 
-const badgeList = [
-  {
-    title: "Hong Kong",
-    number: 10,
-    image: "ship.png",
-  },
-  {
-    title: "China",
-    number: 10,
-    image: "dragon.png",
-  },
-  {
-    title: "World",
-    number: 10,
-    image: "world.png",
-  },
-];
+export default BadgeGroup;

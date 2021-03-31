@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Breadcrumbs,
@@ -11,26 +11,58 @@ import {
   FormControlLabel,
   Link as UILink,
 } from "@material-ui/core/";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import styles from "./BadgeContent.module.css";
 import Layout from "../Layout/Layout";
 import Attribution from "./Attribution";
 import { useSnackbar } from "notistack";
-
+import Axios from "axios";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 const BadgeContent = () => {
   return <Layout Page={Page} />;
 };
 
-const Page = () => {
+const Page = ({ match, location }) => {
+  const {
+    params: { badgeGroup, badgeCategory },
+  } = match;
+  console.log(location);
+  const history = useHistory();
+  const [badgeList, setBadgeList] = useState([]);
+  const [badgeGroupTitle, setBadgeGroupTitle] = useState("");
+  const [badgeCategoryTitle, setBadgeCategoryTitle] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+
+  useEffect(() => {
+    const getBadgeList = async () => {
+      const url = `http://127.0.0.1:5000/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
+      await Axios.get(url)
+        .then((response) => {
+          setBadgeList(response.data.data);
+          setBadgeGroupTitle(response.data.badgeGroup);
+          setBadgeCategoryTitle(response.data.badgeCategory);
+          setThumbnail(response.data.thumbnail)
+        })
+        .catch(() => {
+          history.push("/404/");
+        });
+    };
+
+    getBadgeList();
+  }, []);
+
   return (
     <div className={styles.main}>
-      <History />
+      <History
+        path={location.pathname}
+        badgeGroupTitle={badgeGroupTitle}
+        badgeCategoryTitle={badgeCategoryTitle}
+      />
       <br />
-      <Content />
+      <Content badgeList={badgeList} badgeCategoryTitle={badgeCategoryTitle} thumbnail={`/${thumbnail}`}/>
       <br />
       <br />
       <br />
@@ -39,7 +71,9 @@ const Page = () => {
   );
 };
 
-const History = () => {
+const History = ({ path, badgeGroupTitle, badgeCategoryTitle }) => {
+  const secondPath = path.split("/").slice(0, 3).join("/");
+
   return (
     <Breadcrumbs
       separator={<NavigateNextIcon fontSize="small" />}
@@ -50,50 +84,45 @@ const History = () => {
           Badges
         </Typography>
       </Link>
-      <Link to="/badges/hongkong/" className={styles.breadcrumb}>
+      <Link to={secondPath} className={styles.breadcrumb}>
         <Typography variant="h4" component="h4">
-          Hong Kong
+          {badgeGroupTitle}
         </Typography>
       </Link>
-      <Link to="/badges/hongkong/skyscrapers" className={styles.breadcrumb}>
+      <Link to={path} className={styles.breadcrumb}>
         <Typography variant="h4" component="h4">
-          Skyscrapers
+          {badgeCategoryTitle}
         </Typography>
       </Link>
     </Breadcrumbs>
   );
 };
 
-const Content = () => {
+const Content = ({ badgeList, badgeCategoryTitle, thumbnail }) => {
   return (
     <div className={styles.content}>
       <Grid container spacing={3}>
         <Grid item xs={4}>
-          <Sidebar />
+          <Sidebar badgeCategoryTitle={badgeCategoryTitle} thumbnail={thumbnail} />
         </Grid>
         <Grid item xs={8}>
-          <Badges />
+          <Badges badgeList={badgeList} />
         </Grid>
       </Grid>
     </div>
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ badgeCategoryTitle, thumbnail }) => {
   return (
     <Paper className={styles.paper}>
       <img
-        src="/skyscrapers.png"
+        src={thumbnail}
         className={styles.badgeImage}
-        alt="skyscrapers"
+        alt={badgeCategoryTitle}
       />
       <Typography variant="h4" gutterBottom>
-        Skyscrapers
-      </Typography>
-      <Typography variant="body2" display="block">
-        Hong Kong has over 9,000 high-rise buildings and one of the most iconic
-        skylines in the world. How many have you checked out? Visit some of Hong
-        Kong's tallest buildings to earn the badge!
+        {badgeCategoryTitle}
       </Typography>
       <br />
       <Typography variant="h6" gutterBottom>
@@ -104,11 +133,16 @@ const Sidebar = () => {
   );
 };
 
-const Badges = () => {
+const Badges = ({ badgeList }) => {
   return (
     <div>
-      {skyscrapers.map(({ label, url, text }) => (
-        <BadgeAccordion text={text} label={label} url={url} key={label} />
+      {badgeList.map(({ title, description, wikipedia_url }) => (
+        <BadgeAccordion
+          text={description}
+          label={title}
+          url={wikipedia_url}
+          key={title}
+        />
       ))}
     </div>
   );
@@ -118,7 +152,6 @@ const BadgeAccordion = ({ label, text, url }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const validateBadge = (event) => {
-    console.log(event.target.checked);
     event.stopPropagation();
 
     if (event.target.checked) {

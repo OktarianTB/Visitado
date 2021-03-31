@@ -1,5 +1,5 @@
-export { default as Badges } from "./Badges/BadgesMain";
-export { default as BadgesLocation } from "./Badges/BadgesLocation";
+export { default as BadgeGroup } from "./Badges/BadgeGroup";
+export { default as BadgeCategories } from "./Badges/BadgeCategories";
 export { default as BadgeContent } from "./Badges/BadgeContent";
 export { default as Explore } from "./Explore/Explore";
 export { default as Home } from "./Home/Home";

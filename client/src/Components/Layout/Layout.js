@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Layout = ({ Page, location }) => {
+const Layout = ({ Page, location, match }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -45,7 +45,7 @@ const Layout = ({ Page, location }) => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Page />
+          <Page match={match} location={location} />
         </Container>
       </main>
     </div>

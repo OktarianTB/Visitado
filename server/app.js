@@ -43,9 +43,13 @@ mongoose
 // Setup Routes
 const usersRouter = require("./routes/userRoute");
 const authRouter = require("./routes/authRoute");
+const badgeRouter = require("./routes/badgeRoute");
+const postRouter = require("./routes/postRoute");
 
 app.use("/auth", authRouter);
 app.use("/user", usersRouter);
+app.use("/badge", badgeRouter);
+app.use("/post", postRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

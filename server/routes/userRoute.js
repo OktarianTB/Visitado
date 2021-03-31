@@ -1,9 +1,16 @@
 const express = require("express");
-const { getUser } = require("../controllers/userController");
+const { getUser, followUser } = require("../controllers/userController");
+const {
+  addLocationToUser,
+  getLocationsForUser,
+} = require("../controllers/locationController");
 const auth = require("../controllers/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", auth, getUser);
+router.get("/location/:userId", getLocationsForUser);
+router.post("/location", auth, addLocationToUser);
+router.get("/follow/:followUserId", auth, followUser);
+router.get("/:userId", getUser);
 
 module.exports = router;

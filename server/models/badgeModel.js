@@ -20,7 +20,6 @@ const badgeSchema = new mongoose.Schema({
   location: {
     type: mongoose.Schema.ObjectId,
     ref: "Location",
-    required: [true, "Badge must be associated to a Location."],
   },
 });
 

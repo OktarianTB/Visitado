@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const slug = require('mongoose-slug-updater');
+
+mongoose.plugin(slug);
 
 const badgeCategorySchema = new mongoose.Schema({
   title: {
@@ -6,6 +9,7 @@ const badgeCategorySchema = new mongoose.Schema({
     required: [true, "Title is required."],
     minlength: [2, "Title must be at least 2 characters."],
   },
+  slug: { type: String, slug: 'title', slugPaddingSize: 1, unique: true },
   thumbnail: {
     type: String,
     required: [true, "Thumbnail is required."],
