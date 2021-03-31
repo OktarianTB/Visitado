@@ -10,13 +10,13 @@ const Login = () => {
       direction="row"
       alignItems="center"
       justify="center"
-      style={{ minHeight: "95vh" }}
+      style={{ minHeight: "95vh", maxWidth: "95vw" }}
     >
-      <Grid xs={6}>
+      <Grid item xs={6}>
         <img src="koala.png" alt="koala logo" className={styles.logo} />
       </Grid>
 
-      <Grid xs={6}>
+      <Grid item xs={6}>
         <div className={styles.login}>
           <Typography
             component="h1"

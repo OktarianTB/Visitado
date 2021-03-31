@@ -10,6 +10,7 @@ const errorMessage = (next, message) => {
 exports.registerUser = async (req, res, next) => {
   try {
     const { username, password, displayName } = req.body;
+    console.log(username, password, displayName);
 
     if (!username || !password || !displayName) {
       return errorMessage(next, "Not all fields have been entered.");
@@ -35,8 +36,10 @@ exports.registerUser = async (req, res, next) => {
       displayName,
     });
     const savedUser = await newUser.save();
+
     res.status(201).json(savedUser);
   } catch (error) {
+    console.log(error);
     return errorMessage(next, error.message);
   }
 };

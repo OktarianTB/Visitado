@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema(
     },
     picture_url: {
       type: String,
-      default: "koala.png"
+      default: "koala.png",
     },
     is_admin: {
       type: Boolean,
