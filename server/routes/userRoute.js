@@ -1,5 +1,9 @@
 const express = require("express");
-const { getUser, followUser } = require("../controllers/userController");
+const {
+  getUser,
+  followUser,
+  updateUser,
+} = require("../controllers/userController");
 const {
   addLocationToUser,
   getLocationsForUser,
@@ -10,7 +14,9 @@ const router = express.Router();
 
 router.get("/location/:userId", getLocationsForUser);
 router.post("/location", auth, addLocationToUser);
-router.get("/follow/:followUserId", auth, followUser);
-router.get("/:userId", getUser);
+router.get("/follow/:followUserId", auth, followUser); // make post
+router.get("/:username", getUser);
+
+router.post("/update", auth, updateUser);
 
 module.exports = router;

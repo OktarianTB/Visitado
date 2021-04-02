@@ -8,13 +8,8 @@ const errorMessage = (next, message) => {
 
 exports.getUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
-
-    if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
-      return errorMessage(next, "This user does not exist.");
-    }
-
-    const user = await User.findById(userId);
+    const { username } = req.params;
+    const user = await User.findOne({ username });
 
     if (!user) {
       return errorMessage(next, "This user does not exist.");
@@ -27,6 +22,7 @@ exports.getUser = async (req, res, next) => {
         displayName: user.displayName,
         biography: user.biography,
         picture_url: user.picture_url,
+        location: user.location,
       },
     });
   } catch (error) {
@@ -49,7 +45,43 @@ exports.getFullUser = async (req, res, next) => {
         displayName: user.displayName,
         biography: user.biography,
         picture_url: user.picture_url,
-        id: user._id
+        id: user._id,
+        location: user.location,
+      },
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.updateUser = async (req, res, next) => {
+  try {
+    const { displayName, biography, location } = req.body;
+
+    if (!displayName || !biography || !location) {
+      return errorMessage(next, "Not all required fields have been entered.");
+    }
+
+    const updatedInfo = {
+      displayName,
+      biography,
+      location,
+    };
+    console.log("here")
+    const updatedUser = await User.findByIdAndUpdate(req.userId, updatedInfo, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(201).json({
+      status: "success",
+      data: {
+        username: updatedUser.updatedUsername,
+        displayName: updatedUser.displayName,
+        biography: updatedUser.biography,
+        picture_url: updatedUser.picture_url,
+        id: updatedUser._id,
+        location: updatedUser.location,
       },
     });
   } catch (error) {

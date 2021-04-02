@@ -13,9 +13,7 @@ const Login = () => {
     history.push("/");
   }
 
-  return userData ? (
-    <div></div>
-  ) : (
+  return (
     <Grid
       container
       spacing={3}
@@ -69,11 +67,9 @@ const LoginForm = () => {
     e.preventDefault();
     const url = "http://127.0.0.1:5000/auth/login";
     const user = { username, password };
-    console.log(user);
 
     await Axios.post(url, user)
       .then((response) => {
-        console.log(response);
         setUserData({
           token: response.data.token,
           user: response.data.user,

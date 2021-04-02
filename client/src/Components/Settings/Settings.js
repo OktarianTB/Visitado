@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Grid,
   Typography,
@@ -9,6 +9,8 @@ import {
 import { useSnackbar } from "notistack";
 import styles from "./Settings.module.css";
 import Layout from "../Layout/Layout";
+import UserContext from "../../Utils/UserContext";
+import Axios from "axios";
 
 const Settings = () => {
   return <Layout Page={Page} />;
@@ -16,6 +18,12 @@ const Settings = () => {
 
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const { userData, setUserData } = useContext(UserContext);
+  const [displayName, setDisplayName] = useState(userData.user.displayName);
+  const [displayNameError, setDisplayNameError] = useState("");
+  const [biography, setBiography] = useState(userData.user.biography);
+  const [location, setLocation] = useState(userData.user.location);
+  const [locationError, setLocationError] = useState("");
 
   const handleClick = () => {
     enqueueSnackbar("Changes saved!", {
@@ -25,32 +33,71 @@ const Page = () => {
     });
   };
 
+  const onChangeBiography = (e) => {
+    const newBiography = e.target.value;
+    setBiography(newBiography);
+  };
+
+  const onChangeDisplayName = (e) => {
+    const newDisplayName = e.target.value;
+    setDisplayName(newDisplayName);
+
+    if (newDisplayName.length < 4 || newDisplayName.length > 15) {
+      setDisplayNameError("Display Name must be between 4 and 15 characters.");
+    } else {
+      setDisplayNameError("");
+    }
+  };
+
+  const onChangeLocation = (e) => {
+    const newLocation = e.target.value;
+    setLocation(newLocation);
+
+    if (newLocation.length < 4 || newLocation.length > 20) {
+      setLocationError("Location must be between 4 and 20 characters.");
+    } else {
+      setLocationError("");
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!locationError && !displayNameError) {
+      const url = "http://127.0.0.1:5000/user/update";
+      const headers = {
+        "x-auth-token": userData.token,
+      };
+      const newUserInfo = { displayName, biography, location };
+
+      await Axios.post(url, newUserInfo, { headers })
+        .then((response) => {
+          setUserData({
+            token: userData.token,
+            user: response.data.data,
+          });
+        })
+        .catch(() => {
+          setUserData({ token: undefined, user: undefined });
+        });
+    }
+  };
+
   return (
     <Container component="main" maxWidth="sm">
       <div className={styles.main}>
         <Typography component="h1" variant="h5">
           Change Settings
         </Typography>
-        <form className={styles.form}>
-          <Grid container spacing={2}>
+        <form className={styles.form} onSubmit={onSubmit}>
+          <Grid container spacing={2} justify="center">
             <Grid item xs={12}>
               <TextField
                 label="Username"
                 id="outlined-margin-normal"
                 margin="normal"
                 variant="outlined"
-                value="@oktarian"
-                disabled
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Email Address"
-                id="outlined-margin-normal"
-                margin="normal"
-                variant="outlined"
-                value="oktotb@gmail.com"
+                value={`@${userData.user.username}`}
                 disabled
                 fullWidth
               />
@@ -61,8 +108,11 @@ const Page = () => {
                 id="outlined-margin-normal"
                 margin="normal"
                 variant="outlined"
-                value="Oktarian"
+                value={displayName}
                 fullWidth
+                onChange={onChangeDisplayName}
+                error={displayNameError ? true : false}
+                helperText={displayNameError}
               />
             </Grid>
             <Grid item xs={12}>
@@ -71,8 +121,11 @@ const Page = () => {
                 id="outlined-margin-normal"
                 margin="normal"
                 variant="outlined"
-                value="Hong Kong"
+                value={location}
                 fullWidth
+                onChange={onChangeLocation}
+                error={locationError ? true : false}
+                helperText={locationError}
               />
             </Grid>
             <Grid item xs={12}>
@@ -83,20 +136,25 @@ const Page = () => {
                 rows={3}
                 margin="normal"
                 variant="outlined"
-                value="Hi, I'm baby josch!"
+                value={biography}
                 fullWidth
+                onChange={onChangeBiography}
               />
             </Grid>
+            <Typography align="center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                disableElevation
+                onClick={handleClick}
+                className={styles.submit}
+              >
+                Save Changes
+              </Button>
+            </Typography>
           </Grid>
         </form>
-        <Button
-          variant="contained"
-          color="primary"
-          disableElevation
-          onClick={handleClick}
-        >
-          Save Changes
-        </Button>
       </div>
     </Container>
   );

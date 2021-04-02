@@ -52,6 +52,7 @@ const App = () => {
       if (tokenIsValid.data) {
         await Axios.get(url + "/auth/user", { headers })
           .then((response) => {
+            console.log(response.data.data);
             setUserData({
               token,
               user: response.data.data,
@@ -74,14 +75,18 @@ const App = () => {
         <Switch>
           <PrivateRoute path="/" exact component={Home} />
           <PrivateRoute path="/badges" exact component={BadgeGroup} />
-          <PrivateRoute path="/badges/:badgeGroup" exact component={BadgeCategories} />
+          <PrivateRoute
+            path="/badges/:badgeGroup"
+            exact
+            component={BadgeCategories}
+          />
           <PrivateRoute
             path="/badges/:badgeGroup/:badgeCategory"
             exact
             component={BadgeContent}
           />
           <PrivateRoute path="/explore" exact component={Explore} />
-          <PrivateRoute path="/profile" exact component={Profile} />
+          <PrivateRoute path="/profile/:username" exact component={Profile} />
           <PrivateRoute path="/favorites" exact component={Favorites} />
           <PrivateRoute path="/settings" exact component={Settings} />
           <PrivateRoute path="/add-activity" exact component={AddActivity} />

@@ -72,6 +72,7 @@ exports.loginUser = async (req, res, next) => {
         biography: user.biography,
         picture_url: user.picture_url,
         id: user._id,
+        location: user.location,
       },
     });
   } catch (error) {
@@ -88,7 +89,7 @@ exports.validate = async (req, res) => {
     }
 
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    
+
     if (!verified) {
       return res.json(false);
     }

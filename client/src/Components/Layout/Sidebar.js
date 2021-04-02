@@ -84,7 +84,7 @@ const Sidebar = ({ open, handleDrawerClose }) => {
 const DrawerMenu = () => {
   const path = useLocation().pathname.split("/")[1];
   const history = useHistory();
-  const { setUserData } = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
 
   const logout = () => {
     setUserData({
@@ -112,7 +112,7 @@ const DrawerMenu = () => {
         <ListItem
           button
           component={Link}
-          to="/profile"
+          to={`/profile/${userData.user.username}`}
           style={{ backgroundColor: path === "profile" ? "#e0e0e0" : "" }}
         >
           <ListItemIcon>

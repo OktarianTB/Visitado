@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "koala.png",
     },
+    location: {
+      type: String,
+      default: "Hong Kong"
+    },
     is_admin: {
       type: Boolean,
       default: false,

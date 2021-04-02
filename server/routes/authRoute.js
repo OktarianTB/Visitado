@@ -8,7 +8,7 @@ const {
 const { getFullUser } = require("../controllers/userController");
 const auth = require("../controllers/authMiddleware");
 
-router.post("register", registerUser);
+router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.post("/validate", validate);
 
