@@ -1,7 +1,6 @@
-const mapSettings = (locations, search, button) => {
+const mapSettings = (locations, search) => {
   const settings = {
     displaySearch: search,
-    displayButton: button,
     markerLayers: [
       {
         imageUrl: "http://maps.google.com/mapfiles/ms/micons/orange-dot.png",
@@ -24,6 +23,7 @@ const mapSettings = (locations, search, button) => {
         },
         imageName: "orangeMarker",
         sourceName: "source1",
+        displayButton: false,
       },
     ],
   };

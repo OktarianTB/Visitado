@@ -21,7 +21,7 @@ const Page = () => {
       {finished ? (
         <MapContainer
           height={0.75 * height}
-          settings={mapSettings(locations, true, true)}
+          settings={mapSettings(locations, true)}
         />
       ) : (
         <div></div>

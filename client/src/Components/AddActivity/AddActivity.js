@@ -1,29 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Typography, Paper, TextField, Grid, Button } from "@material-ui/core/";
 import styles from "./AddActivity.module.css";
 import CreateIcon from "@material-ui/icons/Create";
 import Layout from "../Layout/Layout";
-import SelectForm from "../Forms/SelectForm";
 import MapContainer from "../Maps/Map";
+import mapSettings from "../Maps/MapSettings";
+import UserContext from "../../Utils/UserContext";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import Axios from "axios";
+import { makeStyles } from "@material-ui/core/styles";
 
 const AddActivity = () => {
   return <Layout Page={Page} />;
 };
 
-const activities = ["Hiking", "City", "Beach", "Animals", "Bicycling"];
-const badges = ["IFC Tower", "ICC Tower", "HSBC Tower"];
+const activities = [
+  "Hiking",
+  "City",
+  "Beach",
+  "Animals",
+  "Bicycling",
+  "Walk",
+  "DIY",
+  "Home",
+  "Friends",
+  "Family",
+];
+
+const useStyles = makeStyles(() => ({
+  formControl: {
+    width: "100%",
+    marginBottom: 20,
+    marginRight: 50,
+  },
+}));
 
 const Page = () => {
+  const classes = useStyles();
   const [activity, setActivity] = useState("");
   const [badge, setBadge] = useState("");
+  const [badges, setBadges] = useState([]);
+  const [postLocation, setPostLocation] = useState("");
+  const { userData } = useContext(UserContext);
+  const [locations, setLocations] = useState([]);
+  const [finished, setFinished] = useState(false);
 
-  const handleActivityChange = (event) => {
-    setActivity(event.target.value);
+  const handleActivityChange = (event, value) => {
+    setActivity(value);
+    console.log(value);
   };
 
-  const handleBadgeChange = (event) => {
-    setBadge(event.target.value);
+  const handleBadgeChange = (event, value) => {
+    setBadge(value);
+    console.log(value);
   };
+
+  const handleLocationChange = (event, value) => {
+    setPostLocation(value);
+  };
+
+  useEffect(() => {
+    const getLocations = async () => {
+      const url = `http://127.0.0.1:5000/user/location/${userData.user.username}`;
+      await Axios.get(url)
+        .then((response) => {
+          setLocations(response.data.data);
+        })
+        .catch(() => {});
+
+      setFinished(true);
+    };
+
+    const getBadges = async () => {
+      const url = `http://127.0.0.1:5000/badge/all`;
+      await Axios.get(url)
+        .then((response) => {
+          setBadges(response.data.data);
+        })
+        .catch(() => {});
+    };
+
+    getLocations();
+    getBadges();
+  }, []);
 
   return (
     <Paper className={styles.paper}>
@@ -34,27 +93,50 @@ const Page = () => {
       </div>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
-          <SelectForm
-            value={activity}
-            handleChange={handleActivityChange}
-            list={activities}
-            title="Select Activity"
+          <Autocomplete
+            id="combo-box-demo"
+            openOnFocus
+            options={activities}
+            getOptionLabel={(act) => act}
+            className={classes.formControl}
+            onChange={handleActivityChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Select Activity"
+                variant="outlined"
+              />
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <SelectForm
-            value={badge}
-            handleChange={handleBadgeChange}
-            list={badges}
-            title="Select Badge"
+          <Autocomplete
+            id="combo-box-demo"
+            openOnFocus
+            options={badges}
+            getOptionLabel={(badge) => badge.title}
+            className={classes.formControl}
+            onChange={handleBadgeChange}
+            renderInput={(params) => (
+              <TextField {...params} label="Select Badge" variant="outlined" />
+            )}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <SelectForm
-            value={badge}
-            handleChange={handleBadgeChange}
-            list={badges}
-            title="Select of my Locations"
+          <Autocomplete
+            id="combo-box-demo"
+            openOnFocus
+            options={locations}
+            getOptionLabel={(loc) => loc.name}
+            className={classes.formControl}
+            onChange={handleLocationChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Select of my Locations"
+                variant="outlined"
+              />
+            )}
           />
         </Grid>
       </Grid>
@@ -62,7 +144,11 @@ const Page = () => {
         or add a location on the map
       </Typography>
       <br />
-      <MapContainer height={"30Vh"} />
+      {finished ? (
+        <MapContainer height={"30Vh"} settings={mapSettings(locations, true)} />
+      ) : (
+        <div></div>
+      )}
       <br />
       <TextField
         label="Post Title"

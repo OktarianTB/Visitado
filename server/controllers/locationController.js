@@ -1,5 +1,6 @@
 const Location = require("../models/locationModel");
 const User = require("../models/userModel");
+const Badge = require("../models/badgeModel");
 const createError = require("http-errors");
 
 const errorMessage = (next, message) => {
@@ -53,6 +54,50 @@ exports.addLocationToUser = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       data: savedLocation,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.addLocation = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user || !user.is_admin) {
+      return errorMessage(next, "Permission denied.");
+    }
+
+    const { name, location } = req.body;
+
+    if (!name || !location) {
+      return errorMessage(next, "Not all fields have been entered.");
+    }
+
+    const newLocation = new Location({
+      name,
+      location,
+    });
+    const savedLocation = await newLocation.save();
+
+    res.status(201).json({
+      status: "success",
+      data: savedLocation,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.getLocationsForBadges = async (req, res, next) => {
+  try {
+    const locations = await Badge.find({
+      location: { $exists: true },
+    }).populate("location");
+
+    res.status(201).json({
+      status: "success",
+      data: locations,
     });
   } catch (error) {
     return errorMessage(next, error.message);

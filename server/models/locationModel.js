@@ -21,7 +21,6 @@ const locationSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: [true, "Location must be associated to a user."],
     },
   },
   {

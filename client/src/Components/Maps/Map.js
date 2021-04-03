@@ -29,7 +29,13 @@ const MapContainer = ({ height, settings }) => {
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
-    const AddMarkers = ({ imageUrl, data, imageName, sourceName }) => {
+    const AddMarkers = ({
+      imageUrl,
+      data,
+      imageName,
+      sourceName,
+      displayButton,
+    }) => {
       map.loadImage(imageUrl, function (error, image) {
         if (error) throw error;
         map.addImage(imageName, image);
@@ -57,7 +63,7 @@ const MapContainer = ({ height, settings }) => {
             <Popup
               feature={feature}
               enqueueSnackbar={enqueueSnackbar}
-              displayButton={settings.displayButton}
+              displayButton={displayButton}
               userData={userData}
             />,
             popupNode
@@ -86,6 +92,7 @@ const MapContainer = ({ height, settings }) => {
           },
           imageName: "blueMarker",
           sourceName: "searchLayer",
+          displayButton: true,
         });
       }
     });

@@ -58,7 +58,7 @@ const Page = ({ match }) => {
         </Grid>
         <Grid item xs={8}>
           {finished ? (
-            <Content settings={mapSettings(locations, false, false)} />
+            <Content settings={mapSettings(locations, false)} />
           ) : (
             <div></div>
           )}

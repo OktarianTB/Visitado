@@ -52,23 +52,27 @@ exports.createBadgeGroup = async (req, res, next) => {
 };
 
 exports.getBadgeCategories = async (req, res, next) => {
-  const { badgeGroup } = req.params;
+  try {
+    const { badgeGroup } = req.params;
 
-  const group = await BadgeGroup.findOne({ slug: badgeGroup });
+    const group = await BadgeGroup.findOne({ slug: badgeGroup });
 
-  if (!group) {
-    return errorMessage(next, "This badge group does not exist.");
+    if (!group) {
+      return errorMessage(next, "This badge group does not exist.");
+    }
+
+    const badgeCategories = await BadgeCategory.find({
+      badge_group: group._id,
+    }).sort({ priority: "asc" });
+
+    res.status(200).json({
+      status: "success",
+      badgeGroup: group.title,
+      data: badgeCategories,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
   }
-
-  const badgeCategories = await BadgeCategory.find({
-    badge_group: group._id,
-  }).sort({ priority: "asc" });
-
-  res.status(200).json({
-    status: "success",
-    badgeGroup: group.title,
-    data: badgeCategories,
-  });
 };
 
 exports.createBadgeCategory = async (req, res, next) => {
@@ -103,36 +107,40 @@ exports.createBadgeCategory = async (req, res, next) => {
 };
 
 exports.getBadges = async (req, res, next) => {
-  const { badgeGroup, badgeCategory } = req.params;
+  try {
+    const { badgeGroup, badgeCategory } = req.params;
 
-  const group = await BadgeGroup.findOne({ slug: badgeGroup });
+    const group = await BadgeGroup.findOne({ slug: badgeGroup });
 
-  if (!group) {
-    return errorMessage(next, "This badge group does not exist.");
+    if (!group) {
+      return errorMessage(next, "This badge group does not exist.");
+    }
+
+    const category = await BadgeCategory.findOne({ slug: badgeCategory });
+
+    if (!category) {
+      return errorMessage(next, "This badge category does not exist.");
+    } else if (String(category.badge_group) !== String(group._id)) {
+      return errorMessage(
+        next,
+        "This badge category does not belong to this group."
+      );
+    }
+
+    const badges = await Badge.find({
+      badge_category: category._id,
+    }).sort({ title: "asc" });
+
+    res.status(200).json({
+      status: "success",
+      badgeGroup: group.title,
+      badgeCategory: category.title,
+      thumbnail: category.thumbnail,
+      data: badges,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
   }
-
-  const category = await BadgeCategory.findOne({ slug: badgeCategory });
-
-  if (!category) {
-    return errorMessage(next, "This badge category does not exist.");
-  } else if (String(category.badge_group) !== String(group._id)) {
-    return errorMessage(
-      next,
-      "This badge category does not belong to this group."
-    );
-  }
-
-  const badges = await Badge.find({
-    badge_category: category._id,
-  }).sort({ title: "asc" });
-
-  res.status(200).json({
-    status: "success",
-    badgeGroup: group.title,
-    badgeCategory: category.title,
-    thumbnail: category.thumbnail,
-    data: badges,
-  });
 };
 
 exports.createBadge = async (req, res, next) => {
@@ -167,6 +175,19 @@ exports.createBadge = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       data: savedBadge,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.getAllBadges = async (req, res, next) => {
+  try {
+    const badges = await Badge.find().sort({ title: "asc" });
+
+    res.status(201).json({
+      status: "success",
+      data: badges,
     });
   } catch (error) {
     return errorMessage(next, error.message);
