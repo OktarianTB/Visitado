@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./Login.module.css";
 import { Button, TextField, Link, Typography, Grid } from "@material-ui/core/";
@@ -9,9 +9,11 @@ const Login = () => {
   const history = useHistory();
   const { userData } = useContext(UserContext);
 
-  if (userData.user) {
-    history.push("/");
-  }
+  useEffect(() => {
+    if (userData.user) {
+      history.push("/");
+    }
+  }, [userData]);
 
   return (
     <Grid

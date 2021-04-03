@@ -52,7 +52,6 @@ const App = () => {
       if (tokenIsValid.data) {
         await Axios.get(url + "/auth/user", { headers })
           .then((response) => {
-            console.log(response.data.data);
             setUserData({
               token,
               user: response.data.data,

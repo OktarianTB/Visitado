@@ -8,19 +8,15 @@ const errorMessage = (next, message) => {
 
 exports.getLocationsForUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { username } = req.params;
 
-    if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
-      return errorMessage(next, "This user does not exist.");
-    }
-
-    const user = await User.findById(userId);
+    const user = await User.findOne({ username });
 
     if (!user) {
       return errorMessage(next, "This user does not exist.");
     }
 
-    const locations = await Location.find({ user: userId });
+    const locations = await Location.find({ user: user._id });
 
     const processedLocations = locations.map((location) => {
       return {

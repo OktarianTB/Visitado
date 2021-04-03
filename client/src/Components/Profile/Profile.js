@@ -3,6 +3,7 @@ import { Grid, Typography, Paper, Divider } from "@material-ui/core/";
 import styles from "./Profile.module.css";
 import Layout from "../Layout/Layout";
 import MapContainer from "../Maps/Map";
+import mapSettings from "../Maps/MapSettings";
 import BadgePost from "../Posts/BadgePost";
 import ActivityPost from "../Posts/ActivityPost";
 import Axios from "axios";
@@ -18,6 +19,8 @@ const Page = ({ match }) => {
   } = match;
   const history = useHistory();
   const [user, setUser] = useState(null);
+  const [locations, setLocations] = useState([]);
+  const [finished, setFinished] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -31,7 +34,20 @@ const Page = ({ match }) => {
         });
     };
 
+    const getlocation = async () => {
+      const url = `http://127.0.0.1:5000/user/location/${username}`;
+      await Axios.get(url)
+        .then((response) => {
+          setLocations(response.data.data);
+          setFinished(true);
+        })
+        .catch(() => {
+          history.push("/404/");
+        });
+    };
+
     getUser();
+    getlocation();
   }, []);
 
   return user ? (
@@ -41,7 +57,11 @@ const Page = ({ match }) => {
           <Sidebar user={user} />
         </Grid>
         <Grid item xs={8}>
-          <Content />
+          {finished ? (
+            <Content settings={mapSettings(locations, false, false)} />
+          ) : (
+            <div></div>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -105,11 +125,11 @@ const Sidebar = ({ user }) => {
   );
 };
 
-const Content = () => {
+const Content = ({ settings }) => {
   return (
     <div className={styles.contentDiv}>
       <Paper className={styles.paper}>
-        <MapContainer height={"60Vh"} />
+        <MapContainer height={"60Vh"} settings={settings} />
       </Paper>
       <BadgePost />
       <ActivityPost />
