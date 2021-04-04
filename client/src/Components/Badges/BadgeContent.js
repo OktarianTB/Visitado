@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Typography,
   Breadcrumbs,
@@ -20,6 +20,7 @@ import Attribution from "./Attribution";
 import { useSnackbar } from "notistack";
 import Axios from "axios";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import UserContext from "../../Utils/UserContext";
 
 const BadgeContent = () => {
   return <Layout Page={Page} />;
@@ -29,7 +30,7 @@ const Page = ({ match, location }) => {
   const {
     params: { badgeGroup, badgeCategory },
   } = match;
-  console.log(location);
+  const { userData } = useContext(UserContext);
   const history = useHistory();
   const [badgeList, setBadgeList] = useState([]);
   const [badgeGroupTitle, setBadgeGroupTitle] = useState("");
@@ -39,12 +40,15 @@ const Page = ({ match, location }) => {
   useEffect(() => {
     const getBadgeList = async () => {
       const url = `http://127.0.0.1:5000/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
-      await Axios.get(url)
+      const headers = {
+        "x-auth-token": userData.token,
+      };
+      await Axios.get(url, { headers })
         .then((response) => {
           setBadgeList(response.data.data);
           setBadgeGroupTitle(response.data.badgeGroup);
           setBadgeCategoryTitle(response.data.badgeCategory);
-          setThumbnail(response.data.thumbnail)
+          setThumbnail(response.data.thumbnail);
         })
         .catch(() => {
           history.push("/404/");
@@ -62,7 +66,12 @@ const Page = ({ match, location }) => {
         badgeCategoryTitle={badgeCategoryTitle}
       />
       <br />
-      <Content badgeList={badgeList} badgeCategoryTitle={badgeCategoryTitle} thumbnail={`/${thumbnail}`}/>
+      <Content
+        badgeList={badgeList}
+        badgeCategoryTitle={badgeCategoryTitle}
+        thumbnail={`/${thumbnail}`}
+        userData={userData}
+      />
       <br />
       <br />
       <br />
@@ -98,15 +107,18 @@ const History = ({ path, badgeGroupTitle, badgeCategoryTitle }) => {
   );
 };
 
-const Content = ({ badgeList, badgeCategoryTitle, thumbnail }) => {
+const Content = ({ badgeList, badgeCategoryTitle, thumbnail, userData }) => {
   return (
     <div className={styles.content}>
       <Grid container spacing={3}>
         <Grid item xs={4}>
-          <Sidebar badgeCategoryTitle={badgeCategoryTitle} thumbnail={thumbnail} />
+          <Sidebar
+            badgeCategoryTitle={badgeCategoryTitle}
+            thumbnail={thumbnail}
+          />
         </Grid>
         <Grid item xs={8}>
-          <Badges badgeList={badgeList} />
+          <Badges badgeList={badgeList} userData={userData} />
         </Grid>
       </Grid>
     </div>
@@ -133,39 +145,79 @@ const Sidebar = ({ badgeCategoryTitle, thumbnail }) => {
   );
 };
 
-const Badges = ({ badgeList }) => {
+const Badges = ({ badgeList, userData }) => {
   return (
     <div>
-      {badgeList.map(({ title, description, wikipedia_url }) => (
-        <BadgeAccordion
-          text={description}
-          label={title}
-          url={wikipedia_url}
-          key={title}
-        />
-      ))}
+      {badgeList.map(
+        ({ title, description, wikipedia_url, _id, completed }) => (
+          <BadgeAccordion
+            text={description}
+            label={title}
+            url={wikipedia_url}
+            key={title}
+            badgeId={_id}
+            completed={completed}
+            userData={userData}
+          />
+        )
+      )}
     </div>
   );
 };
 
-const BadgeAccordion = ({ label, text, url }) => {
+const BadgeAccordion = ({ label, text, url, badgeId, userData, completed }) => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const validateBadge = (event) => {
+  const validateBadge = async (event) => {
     event.stopPropagation();
 
     if (event.target.checked) {
-      enqueueSnackbar(`New Badge Added: ${label}`, {
-        variant: "success",
-        preventDuplicate: true,
-        autoHideDuration: 2000,
-      });
+      const url = "http://127.0.0.1:5000/user/badge";
+      const headers = {
+        "x-auth-token": userData.token,
+      };
+
+      const badge = {
+        badge: badgeId,
+      };
+
+      await Axios.post(url, badge, { headers })
+        .then(() => {
+          enqueueSnackbar(`New Badge Added: ${label}`, {
+            variant: "success",
+            preventDuplicate: true,
+            autoHideDuration: 2000,
+          });
+        })
+        .catch(() => {
+          enqueueSnackbar(`Unable to Add: ${label}`, {
+            variant: "default",
+            preventDuplicate: true,
+            autoHideDuration: 2000,
+          });
+        });
     } else {
-      enqueueSnackbar(`Badge Removed: ${label}`, {
-        variant: "default",
-        preventDuplicate: true,
-        autoHideDuration: 2000,
-      });
+      const url = `http://127.0.0.1:5000/user/badge/${badgeId}`;
+      const headers = {
+        "x-auth-token": userData.token,
+      };
+
+      await Axios.delete(url, { headers })
+        .then(() => {
+          enqueueSnackbar(`Removed Badge: ${label}`, {
+            variant: "info",
+            preventDuplicate: true,
+            autoHideDuration: 2000,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          enqueueSnackbar(`Unable to Remove: ${label}`, {
+            variant: "default",
+            preventDuplicate: true,
+            autoHideDuration: 2000,
+          });
+        });
     }
   };
 
@@ -184,6 +236,7 @@ const BadgeAccordion = ({ label, text, url }) => {
             onFocus={(event) => event.stopPropagation()}
             control={<Checkbox />}
             label={label}
+            checked={completed}
           />
         </AccordionSummary>
         <AccordionDetails>

@@ -132,12 +132,34 @@ exports.getBadges = async (req, res, next) => {
       badge_category: category._id,
     }).sort({ title: "asc" });
 
+    const badgesObtainedByUser = await ObtainedBadge.find({
+      user: req.userId,
+    }).select("badge -_id");
+
+    const userBadges = badges.map((badge) => {
+      const userBadge = {
+        _id: badge._id,
+        title: badge.title,
+        wikipedia_url: badge.wikipedia_url,
+        description: badge.description,
+        completed: false,
+      };
+
+      badgesObtainedByUser.forEach((obtained) => {
+        if (String(obtained.badge) === String(badge._id)) {
+          userBadge.completed = true;
+        }
+      });
+
+      return userBadge;
+    });
+
     res.status(200).json({
       status: "success",
       badgeGroup: group.title,
       badgeCategory: category.title,
       thumbnail: category.thumbnail,
-      data: badges,
+      data: userBadges,
     });
   } catch (error) {
     return errorMessage(next, error.message);
@@ -220,14 +242,14 @@ exports.addBadgeToUser = async (req, res, next) => {
 
 exports.removeBadgeFromUser = async (req, res, next) => {
   try {
-    const { badge } = req.body;
+    const { badgeId } = req.params;
 
-    if (!badge) {
-      return errorMessage(next, "Not all fields have been entered.");
+    if (!badgeId.match(/^[0-9a-fA-F]{24}$/)) {
+      return errorMessage(next, "This badge does not exist.");
     }
 
     const obtainedBadge = await ObtainedBadge.findOne({
-      badge,
+      badge: badgeId,
       user: req.userId,
     });
 
@@ -238,7 +260,7 @@ exports.removeBadgeFromUser = async (req, res, next) => {
     await ObtainedBadge.findByIdAndDelete(obtainedBadge._id);
 
     res.status(201).json({
-      status: "success"
+      status: "success",
     });
   } catch (error) {
     return errorMessage(next, error.message);

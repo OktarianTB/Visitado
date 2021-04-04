@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get("/group", getBadgeGroups);
 router.get("/category/:badgeGroup", getBadgeCategories);
-router.get("/items/:badgeGroup/:badgeCategory", getBadges);
+router.get("/items/:badgeGroup/:badgeCategory", auth, getBadges);
 
 router.get("/all", getAllBadges);
 router.get("/locations", getLocationsForBadges);

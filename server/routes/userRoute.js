@@ -24,6 +24,6 @@ router.get("/:username", getUser);
 router.post("/update", auth, updateUser);
 
 router.post("/badge", auth, addBadgeToUser);
-router.delete("/badge", auth, removeBadgeFromUser);
+router.delete("/badge/:badgeId", auth, removeBadgeFromUser);
 
 module.exports = router;
