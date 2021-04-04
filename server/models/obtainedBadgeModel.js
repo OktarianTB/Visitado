@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const obtainedBadgeSchema = new mongoose.Schema(
   {
-    username: {
+    user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
       required: [true, "User is required."],
@@ -18,7 +18,7 @@ const obtainedBadgeSchema = new mongoose.Schema(
   }
 );
 
-obtainedBadgeSchema.index({ username: 1, badge: 1 }, { unique: true });
+obtainedBadgeSchema.index({ userId: 1, badge: 1 }, { unique: true });
 
 const ObtainedBadge = mongoose.model("ObtainedBadge", obtainedBadgeSchema);
 module.exports = ObtainedBadge;

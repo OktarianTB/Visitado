@@ -50,6 +50,7 @@ const MapContainer = ({ height, settings }) => {
           layout: {
             "icon-image": imageName,
             "icon-size": 0.7,
+            "icon-anchor": "bottom",
           },
         });
       });

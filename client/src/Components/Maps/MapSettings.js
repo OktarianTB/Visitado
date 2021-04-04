@@ -1,12 +1,14 @@
-const mapSettings = (locations, search) => {
+// layers = [{color: "orange", locations, button: true}]
+
+const mapSettings = (layers, search) => {
   const settings = {
     displaySearch: search,
-    markerLayers: [
-      {
-        imageUrl: "http://maps.google.com/mapfiles/ms/micons/orange-dot.png",
+    markerLayers: layers.map((layer, index) => {
+      return {
+        imageUrl: `http://maps.google.com/mapfiles/ms/micons/${layer.color}-dot.png`,
         data: {
           type: "FeatureCollection",
-          features: locations.map((loc) => {
+          features: layer.locations.map((loc) => {
             return {
               // feature for Mapbox SF
               type: "Feature",
@@ -21,11 +23,11 @@ const mapSettings = (locations, search) => {
             };
           }),
         },
-        imageName: "orangeMarker",
-        sourceName: "source1",
-        displayButton: false,
-      },
-    ],
+        imageName: `${layer.color}Marker`,
+        sourceName: `source${index}`,
+        displayButton: layer.button,
+      };
+    }),
   };
 
   return settings;

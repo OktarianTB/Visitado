@@ -145,7 +145,13 @@ const Page = () => {
       </Typography>
       <br />
       {finished ? (
-        <MapContainer height={"30Vh"} settings={mapSettings(locations, true)} />
+        <MapContainer
+          height={"30Vh"}
+          settings={mapSettings(
+            [{ color: "orange", locations, button: false }],
+            true
+          )}
+        />
       ) : (
         <div></div>
       )}

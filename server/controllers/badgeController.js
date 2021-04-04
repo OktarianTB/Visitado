@@ -2,6 +2,7 @@ const BadgeGroup = require("../models/badgeGroupModel");
 const BadgeCategory = require("../models/badgeCategoryModel");
 const Badge = require("../models/badgeModel");
 const User = require("../models/userModel");
+const ObtainedBadge = require("../models/obtainedBadgeModel");
 const createError = require("http-errors");
 
 const errorMessage = (next, message) => {
@@ -188,6 +189,56 @@ exports.getAllBadges = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       data: badges,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.addBadgeToUser = async (req, res, next) => {
+  try {
+    const { badge } = req.body;
+
+    if (!badge) {
+      return errorMessage(next, "Not all fields have been entered.");
+    }
+
+    const newObtainedBadge = new ObtainedBadge({
+      badge,
+      user: req.userId,
+    });
+    const savedObtainedBadge = await newObtainedBadge.save();
+
+    res.status(201).json({
+      status: "success",
+      data: savedObtainedBadge,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.removeBadgeFromUser = async (req, res, next) => {
+  try {
+    const { badge } = req.body;
+
+    if (!badge) {
+      return errorMessage(next, "Not all fields have been entered.");
+    }
+
+    const obtainedBadge = await ObtainedBadge.findOne({
+      badge,
+      user: req.userId,
+    });
+
+    if (!obtainedBadge) {
+      return errorMessage(next, "User hasn't obtained this badge.");
+    }
+
+    await ObtainedBadge.findByIdAndDelete(obtainedBadge._id);
+
+    res.status(201).json({
+      status: "success"
     });
   } catch (error) {
     return errorMessage(next, error.message);

@@ -34,20 +34,18 @@ const Page = ({ match }) => {
         });
     };
 
-    const getlocation = async () => {
+    const getLocations = async () => {
       const url = `http://127.0.0.1:5000/user/location/${username}`;
       await Axios.get(url)
         .then((response) => {
           setLocations(response.data.data);
-          setFinished(true);
         })
-        .catch(() => {
-          history.push("/404/");
-        });
+        .catch(() => {});
+      setFinished(true);
     };
 
     getUser();
-    getlocation();
+    getLocations();
   }, []);
 
   return user ? (
@@ -58,7 +56,12 @@ const Page = ({ match }) => {
         </Grid>
         <Grid item xs={8}>
           {finished ? (
-            <Content settings={mapSettings(locations, false)} />
+            <Content
+              settings={mapSettings(
+                [{ color: "orange", locations, button: false }],
+                false
+              )}
+            />
           ) : (
             <div></div>
           )}

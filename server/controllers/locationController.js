@@ -91,9 +91,17 @@ exports.addLocation = async (req, res, next) => {
 
 exports.getLocationsForBadges = async (req, res, next) => {
   try {
-    const locations = await Badge.find({
+    const badges = await Badge.find({
       location: { $exists: true },
     }).populate("location");
+
+    const locations = badges.map((badge) => {
+      return {
+        coordinates: badge.location.location.coordinates,
+        name: badge.location.name,
+        _id: badge.location._id,
+      };
+    });
 
     res.status(201).json({
       status: "success",
