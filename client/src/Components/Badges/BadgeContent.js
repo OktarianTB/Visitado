@@ -36,6 +36,7 @@ const Page = ({ match, location }) => {
   const [badgeGroupTitle, setBadgeGroupTitle] = useState("");
   const [badgeCategoryTitle, setBadgeCategoryTitle] = useState("");
   const [thumbnail, setThumbnail] = useState("");
+  const [completed, setCompleted] = useState(0);
 
   useEffect(() => {
     const getBadgeList = async () => {
@@ -58,6 +59,14 @@ const Page = ({ match, location }) => {
     getBadgeList();
   }, []);
 
+  useEffect(() => {
+    let c = 0;
+    badgeList.forEach((badge) => {
+      if (badge.completed) c += 1;
+    });
+    setCompleted(c);
+  }, [badgeList]);
+
   return (
     <div className={styles.main}>
       <History
@@ -71,6 +80,9 @@ const Page = ({ match, location }) => {
         badgeCategoryTitle={badgeCategoryTitle}
         thumbnail={`/${thumbnail}`}
         userData={userData}
+        completed={completed}
+        setBadgeList={setBadgeList}
+        url={`http://127.0.0.1:5000/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
       />
       <br />
       <br />
@@ -80,7 +92,7 @@ const Page = ({ match, location }) => {
   );
 };
 
-const History = ({ path, badgeGroupTitle, badgeCategoryTitle }) => {
+const History = ({ path, badgeGroupTitle, badgeCategoryTitle, url }) => {
   const secondPath = path.split("/").slice(0, 3).join("/");
 
   return (
@@ -107,7 +119,15 @@ const History = ({ path, badgeGroupTitle, badgeCategoryTitle }) => {
   );
 };
 
-const Content = ({ badgeList, badgeCategoryTitle, thumbnail, userData }) => {
+const Content = ({
+  badgeList,
+  badgeCategoryTitle,
+  thumbnail,
+  userData,
+  completed,
+  setBadgeList,
+  url,
+}) => {
   return (
     <div className={styles.content}>
       <Grid container spacing={3}>
@@ -115,17 +135,24 @@ const Content = ({ badgeList, badgeCategoryTitle, thumbnail, userData }) => {
           <Sidebar
             badgeCategoryTitle={badgeCategoryTitle}
             thumbnail={thumbnail}
+            total={badgeList.length}
+            completed={completed}
           />
         </Grid>
         <Grid item xs={8}>
-          <Badges badgeList={badgeList} userData={userData} />
+          <Badges
+            badgeList={badgeList}
+            userData={userData}
+            setBadgeList={setBadgeList}
+            url={url}
+          />
         </Grid>
       </Grid>
     </div>
   );
 };
 
-const Sidebar = ({ badgeCategoryTitle, thumbnail }) => {
+const Sidebar = ({ badgeCategoryTitle, thumbnail, total, completed }) => {
   return (
     <Paper className={styles.paper}>
       <img
@@ -137,15 +164,23 @@ const Sidebar = ({ badgeCategoryTitle, thumbnail }) => {
         {badgeCategoryTitle}
       </Typography>
       <br />
-      <Typography variant="h6" gutterBottom>
-        7/7 Completed
-      </Typography>
-      <CheckCircleIcon style={{ color: "#66bb6a" }} fontSize="large" />
+      {total > 0 ? (
+        <Typography variant="h6" gutterBottom>
+          {completed}/{total} Completed
+        </Typography>
+      ) : (
+        <div></div>
+      )}
+      {total === completed ? (
+        <CheckCircleIcon style={{ color: "#66bb6a" }} fontSize="large" />
+      ) : (
+        <div></div>
+      )}
     </Paper>
   );
 };
 
-const Badges = ({ badgeList, userData }) => {
+const Badges = ({ badgeList, userData, setBadgeList, url }) => {
   return (
     <div>
       {badgeList.map(
@@ -158,6 +193,8 @@ const Badges = ({ badgeList, userData }) => {
             badgeId={_id}
             completed={completed}
             userData={userData}
+            setBadgeList={setBadgeList}
+            updateUrl={url}
           />
         )
       )}
@@ -165,8 +202,28 @@ const Badges = ({ badgeList, userData }) => {
   );
 };
 
-const BadgeAccordion = ({ label, text, url, badgeId, userData, completed }) => {
+const BadgeAccordion = ({
+  label,
+  text,
+  url,
+  badgeId,
+  userData,
+  completed,
+  setBadgeList,
+  updateUrl,
+}) => {
   const { enqueueSnackbar } = useSnackbar();
+
+  const updateBadgeList = async () => {
+    const headers = {
+      "x-auth-token": userData.token,
+    };
+    await Axios.get(updateUrl, { headers })
+      .then((response) => {
+        setBadgeList(response.data.data);
+      })
+      .catch(() => {});
+  };
 
   const validateBadge = async (event) => {
     event.stopPropagation();
@@ -219,6 +276,8 @@ const BadgeAccordion = ({ label, text, url, badgeId, userData, completed }) => {
           });
         });
     }
+
+    updateBadgeList();
   };
 
   return (

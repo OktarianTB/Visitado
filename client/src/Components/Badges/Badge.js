@@ -9,15 +9,10 @@ import {
 import { Link } from "react-router-dom";
 import styles from "./Badge.module.css";
 
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-
 const Badge = ({ title, image, url, width }) => {
-  const completed = 9;
-  const total = 10;
-
   return (
     <Link to={url} className={styles.link}>
-      <Card style={{ width }}>
+      <Card style={{ maxWidth: width }}>
         <CardActionArea>
           <CardMedia
             className={styles.media}
@@ -26,17 +21,8 @@ const Badge = ({ title, image, url, width }) => {
             <img src={image} className={styles.badgeImage} alt={title} />
           </CardMedia>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
+            <Typography gutterBottom variant="h5" component="h2" align="center">
               {title}
-            </Typography>
-            {completed === total ? (
-              <CheckCircleIcon style={{ float: "right", color: "#66bb6a" }} />
-            ) : (
-              <div></div>
-            )}
-
-            <Typography variant="subtitle1" color="textSecondary" component="p">
-              {completed}/{total} Completed
             </Typography>
           </CardContent>
         </CardActionArea>

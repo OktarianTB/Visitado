@@ -14,6 +14,7 @@ import Layout from "../Layout/Layout";
 import Attribution from "./Attribution";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Axios from "axios";
+import Badge from "./Badge";
 
 const BadgeGroup = () => {
   return <Layout Page={Page} />;
@@ -73,7 +74,13 @@ const Content = ({ badgeList }) => {
         {badgeList.map(({ title, thumbnail, slug }) => {
           return (
             <Grid item xs={12} sm={4} key={title} style={{ marginBottom: 30 }}>
-              <Badge title={title} image={thumbnail} slug={slug} />
+              <Badge
+                title={title}
+                image={`/${thumbnail}`}
+                url={`/badges/${slug}/`}
+                width={350}
+              />
+             
             </Grid>
           );
         })}
@@ -81,40 +88,5 @@ const Content = ({ badgeList }) => {
     </div>
   );
 };
-
-const Badge = ({ title, image, slug }) => {
-  const url = `/badges/${slug}/`;
-
-  return (
-    <Link to={url} className={styles.link}>
-      <Card style={{ maxWidth: 350 }}>
-        <CardActionArea>
-          <CardMedia
-            className={styles.media}
-            style={{ backgroundColor: "#eeeeee" }}
-          >
-            <img src={`/${image}`} className={styles.badgeImage} alt={title} />
-          </CardMedia>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2" align="center">
-              {title}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-    </Link>
-  );
-};
-
-/*
-<Typography
-              variant="subtitle1"
-              color="textSecondary"
-              component="p"
-              align="center"
-            >
-              {number} Badges Available
-            </Typography>
-*/
 
 export default BadgeGroup;
