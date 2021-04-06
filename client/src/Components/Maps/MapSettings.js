@@ -1,8 +1,10 @@
 // layers = [{color: "orange", locations, button: true}]
 
-const mapSettings = (layers, search) => {
+const mapSettings = (layers, search, zoom=9, center=[114.1098795, 22.2976036]) => {
   const settings = {
     displaySearch: search,
+    zoom,
+    center,
     markerLayers: layers.map((layer, index) => {
       return {
         imageUrl: `http://maps.google.com/mapfiles/ms/micons/${layer.color}-dot.png`,

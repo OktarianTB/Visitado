@@ -231,6 +231,23 @@ exports.addBadgeToUser = async (req, res, next) => {
     });
     const savedObtainedBadge = await newObtainedBadge.save();
 
+    // Synchronizing with other badges which are the same
+    const otherBadgesWithLoc = await Badge.find({
+      location: savedObtainedBadge.location,
+    });
+
+    if (otherBadgesWithLoc.length > 1) {
+      otherBadgesWithLoc.forEach(async (b) => {
+        if (String(b._id) !== String(badge)) {
+          const obtained = new ObtainedBadge({
+            badge: b._id,
+            user: req.userId,
+          });
+          await obtained.save();
+        }
+      });
+    }
+
     res.status(201).json({
       status: "success",
       data: savedObtainedBadge,
@@ -261,6 +278,68 @@ exports.removeBadgeFromUser = async (req, res, next) => {
 
     res.status(201).json({
       status: "success",
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+function sort_object(dict) {
+  // Create items array
+  let items = Object.keys(dict).map(function (key) {
+    return [key, dict[key]];
+  });
+
+  // Sort the array based on the second element
+  items.sort(function (first, second) {
+    return second[1] - first[1];
+  });
+
+  items = items.slice(0, 5);
+  return items.map((item) => item[0]);
+}
+
+const getBestCategories = async (categories) => {
+  const bestCategories = categories.map(async (category) => {
+    const cat = await BadgeCategory.findById(category);
+    return cat;
+  });
+  return bestCategories;
+};
+
+exports.getBadgesForProfile = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return errorMessage(next, "This user does not exist.");
+    }
+
+    const badges = await ObtainedBadge.find({ user: user._id }).populate(
+      "badge"
+    );
+
+    const allBadgeCategories = {};
+    badges.forEach((badge) => {
+      const cat = badge.badge.badge_category;
+      if (cat in allBadgeCategories) {
+        allBadgeCategories[cat] = allBadgeCategories[cat] + 1;
+      } else {
+        allBadgeCategories[cat] = 1;
+      }
+    });
+
+    const bestBadgeCategoriesIds = sort_object(allBadgeCategories);
+    await getBestCategories(bestBadgeCategoriesIds).then((bestCategories) => {
+      Promise.all(bestCategories).then((categories) => {
+        console.log(categories);
+        res.status(201).json({
+          status: "success",
+          data: categories,
+        });
+      });
     });
   } catch (error) {
     return errorMessage(next, error.message);

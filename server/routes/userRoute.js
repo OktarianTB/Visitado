@@ -11,6 +11,7 @@ const {
 const {
   addBadgeToUser,
   removeBadgeFromUser,
+  getBadgesForProfile
 } = require("../controllers/badgeController");
 const auth = require("../controllers/authMiddleware");
 
@@ -23,6 +24,7 @@ router.get("/:username", getUser);
 
 router.post("/update", auth, updateUser);
 
+router.get("/badge/:username", getBadgesForProfile);
 router.post("/badge", auth, addBadgeToUser);
 router.delete("/badge/:badgeId", auth, removeBadgeFromUser);
 

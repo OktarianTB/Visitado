@@ -20,7 +20,9 @@ const Page = ({ match }) => {
   const history = useHistory();
   const [user, setUser] = useState(null);
   const [locations, setLocations] = useState([]);
-  const [finished, setFinished] = useState(false);
+  const [badges, setBadges] = useState([]);
+  const [finishedLocations, setFinishedLocations] = useState(false);
+  const [finishedBadges, setFinishedBadges] = useState(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -41,21 +43,32 @@ const Page = ({ match }) => {
           setLocations(response.data.data);
         })
         .catch(() => {});
-      setFinished(true);
+      setFinishedLocations(true);
+    };
+
+    const getBadges = async () => {
+      const url = `http://127.0.0.1:5000/user/badge/${username}`;
+      await Axios.get(url)
+        .then((response) => {
+          setBadges(response.data.data);
+        })
+        .catch(() => {});
+      setFinishedBadges(true);
     };
 
     getUser();
     getLocations();
+    getBadges();
   }, []);
 
   return user ? (
     <div className={styles.content}>
       <Grid container spacing={3}>
         <Grid item xs={4}>
-          <Sidebar user={user} />
+          <Sidebar user={user} badges={badges} />
         </Grid>
         <Grid item xs={8}>
-          {finished ? (
+          {finishedLocations && finishedBadges ? (
             <Content
               settings={mapSettings(
                 [{ color: "orange", locations, button: false }],
@@ -73,7 +86,7 @@ const Page = ({ match }) => {
   );
 };
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, badges }) => {
   return (
     <Paper className={styles.paper}>
       <img
@@ -103,27 +116,26 @@ const Sidebar = ({ user }) => {
       </Typography>
       <br />
       <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <img
-            src="/skyscrapers.png"
-            className={styles.badgeImage}
-            alt="skyscrapers"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <img src="/noodles.png" className={styles.badgeImage} alt="food" />
-        </Grid>
-        <Grid item xs={6}>
-          <img src="/hiking.png" className={styles.badgeImage} alt="hiking" />
-        </Grid>
-        <Grid item xs={6}>
-          <img
-            src="/laugh.png"
-            className={styles.badgeImage}
-            alt="activities"
-          />
-        </Grid>
+        {badges.map((badge) => {
+          const img = `/${badge.thumbnail}`;
+          return (
+            <Grid item xs={6}>
+              <img src={img} className={styles.badgeImage} alt={badge.slug} />
+            </Grid>
+          );
+        })}
       </Grid>
+      {badges.length == 0 ? (
+        <div>
+          <br />
+          <Typography variant="subtitle1" align="center">
+            No badges collected yet!
+          </Typography>
+          <br />
+        </div>
+      ) : (
+        <div></div>
+      )}
     </Paper>
   );
 };

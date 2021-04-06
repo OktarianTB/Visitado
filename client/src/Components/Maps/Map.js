@@ -22,8 +22,8 @@ const MapContainer = ({ height, settings }) => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/oktarian/ckmq0pu340nng17muwigrj2ty",
-      center: [114.1098795, 22.2976036],
-      zoom: 9,
+      center: settings.center,
+      zoom: settings.zoom,
     });
 
     // add navigation control (the +/- zoom buttons)

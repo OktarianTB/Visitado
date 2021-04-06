@@ -56,7 +56,9 @@ const Page = () => {
               { color: "orange", locations: userLocations, button: false },
               { color: "green", locations: badgeLocations, button: true },
             ],
-            true
+            true,
+            1,
+            [0, 40]
           )}
         />
       ) : (
