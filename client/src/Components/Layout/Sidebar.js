@@ -99,6 +99,7 @@ const DrawerMenu = () => {
     <div>
       <List>
         <ListItem
+          key="home"
           button
           component={Link}
           to="/"
@@ -110,6 +111,7 @@ const DrawerMenu = () => {
           <ListItemText primary="Home" />
         </ListItem>
         <ListItem
+          key="profile"
           button
           component={Link}
           to={`/profile/${userData.user.username}`}
@@ -121,6 +123,7 @@ const DrawerMenu = () => {
           <ListItemText primary="Profile" />
         </ListItem>
         <ListItem
+          key="explore"
           button
           component={Link}
           to="/explore"
@@ -132,6 +135,7 @@ const DrawerMenu = () => {
           <ListItemText primary="Explore" />
         </ListItem>
         <ListItem
+          key="badges"
           button
           component={Link}
           to="/badges"
@@ -146,6 +150,7 @@ const DrawerMenu = () => {
       <Divider />
       <List>
         <ListItem
+          key="settings"
           button
           component={Link}
           to="/settings"
@@ -156,7 +161,7 @@ const DrawerMenu = () => {
           </ListItemIcon>
           <ListItemText primary="Settings" />
         </ListItem>
-        <ListItem button onClick={logout}>
+        <ListItem key="logout" button onClick={logout}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>

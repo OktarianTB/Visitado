@@ -119,13 +119,13 @@ const Sidebar = ({ user, badges }) => {
         {badges.map((badge) => {
           const img = `/${badge.thumbnail}`;
           return (
-            <Grid item xs={6}>
+            <Grid item xs={6} key={badge.slug}>
               <img src={img} className={styles.badgeImage} alt={badge.slug} />
             </Grid>
           );
         })}
       </Grid>
-      {badges.length == 0 ? (
+      {badges.length === 0 ? (
         <div>
           <br />
           <Typography variant="subtitle1" align="center">

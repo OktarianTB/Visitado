@@ -3,10 +3,6 @@ import {
   Typography,
   Breadcrumbs,
   Grid,
-  CardActionArea,
-  Card,
-  CardMedia,
-  CardContent,
 } from "@material-ui/core/";
 import styles from "./BadgeGroup.module.css";
 import { Link, useHistory } from "react-router-dom";

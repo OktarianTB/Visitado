@@ -62,10 +62,13 @@ const MapContainer = ({ height, settings }) => {
           const popupNode = document.createElement("div");
           ReactDOM.render(
             <Popup
-              feature={feature}
+              id={feature.properties.id}
+              name={feature.properties.name}
+              coordinates={feature.geometry.coordinates}
               enqueueSnackbar={enqueueSnackbar}
               displayButton={displayButton}
               userData={userData}
+              callback={settings.callback}
             />,
             popupNode
           );
@@ -128,6 +131,27 @@ const MapContainer = ({ height, settings }) => {
 
         popUpRef.current.remove();
         map.getSource("searchLayer").setData(marker);
+
+        const popupNode = document.createElement("div");
+        ReactDOM.render(
+          <Popup
+            id={info.result.id}
+            name={info.result.text}
+            coordinates={info.result.center}
+            enqueueSnackbar={enqueueSnackbar}
+            displayButton={true}
+            userData={userData}
+            callback={settings.callback}
+          />,
+          popupNode
+        );
+        // set popup on map
+        setTimeout(function () {
+          popUpRef.current
+            .setLngLat(info.result.center)
+            .setDOMContent(popupNode)
+            .addTo(map);
+        }, 3000);
       });
 
       map.addControl(geocoder);
@@ -146,8 +170,15 @@ const MapContainer = ({ height, settings }) => {
   );
 };
 
-const Popup = ({ feature, enqueueSnackbar, displayButton, userData }) => {
-  const { id, name, coordinates } = feature.properties;
+const Popup = ({
+  id,
+  name,
+  coordinates,
+  enqueueSnackbar,
+  displayButton,
+  userData,
+  callback,
+}) => {
   const [added, setAdded] = useState(false);
 
   const addLocation = async () => {
@@ -158,16 +189,17 @@ const Popup = ({ feature, enqueueSnackbar, displayButton, userData }) => {
     };
     const newLocation = {
       name,
-      location: { type: "Point", coordinates: JSON.parse(coordinates) },
+      location: { type: "Point", coordinates },
     };
 
     await Axios.post(url, newLocation, { headers })
-      .then(() => {
+      .then((response) => {
         enqueueSnackbar(`Added ${name} to your locations!`, {
           variant: "success",
           preventDuplicate: true,
           autoHideDuration: 2000,
         });
+        callback(response);
       })
       .catch(() => {
         enqueueSnackbar(`Unable to add ${name} to your locations.`, {

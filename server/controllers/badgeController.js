@@ -231,23 +231,6 @@ exports.addBadgeToUser = async (req, res, next) => {
     });
     const savedObtainedBadge = await newObtainedBadge.save();
 
-    // Synchronizing with other badges which are the same
-    const otherBadgesWithLoc = await Badge.find({
-      location: savedObtainedBadge.location,
-    });
-
-    if (otherBadgesWithLoc.length > 1) {
-      otherBadgesWithLoc.forEach(async (b) => {
-        if (String(b._id) !== String(badge)) {
-          const obtained = new ObtainedBadge({
-            badge: b._id,
-            user: req.userId,
-          });
-          await obtained.save();
-        }
-      });
-    }
-
     res.status(201).json({
       status: "success",
       data: savedObtainedBadge,
