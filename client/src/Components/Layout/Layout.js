@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, CssBaseline } from "@material-ui/core/";
 import { withRouter, useHistory } from "react-router-dom";
 import UserContext from "../../Utils/UserContext";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-
+import Axios from "axios";
 import Sidebar from "./Sidebar";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,16 +26,53 @@ const useStyles = makeStyles((theme) => ({
 const Layout = ({ Page, location, match }) => {
   const classes = useStyles();
   const history = useHistory();
-  const { userData } = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
 
   const redirectToPage = () => {
     let path = "/add-activity";
     history.push(path);
   };
 
-  if (!userData.user) {
-    history.push("/login");
-  }
+  useEffect(() => {
+    const url = "http://127.0.0.1:5000";
+    const checkLoggedIn = async () => {
+      let token = localStorage.getItem("auth-token");
+
+      if (token == null) {
+        localStorage.setItem("auth-token", "");
+        token = "";
+        setUserData({ token: undefined, user: undefined });
+        return;
+      }
+
+      const headers = {
+        "x-auth-token": token,
+      };
+
+      const tokenIsValid = await Axios.post(url + "/auth/validate", null, {
+        headers,
+      });
+
+      if (tokenIsValid.data) {
+        await Axios.get(url + "/auth/user", { headers })
+          .then((response) => {
+            setUserData({
+              token,
+              user: response.data.data,
+            });
+          })
+          .catch(() => {
+            setUserData({ token: undefined, user: undefined });
+          });
+      } else {
+        setUserData({ token: undefined, user: undefined });
+      }
+    };
+
+    if (!userData.user) {
+      checkLoggedIn();
+    }
+  }, []);
 
   return userData.user ? (
     <div className={classes.root}>

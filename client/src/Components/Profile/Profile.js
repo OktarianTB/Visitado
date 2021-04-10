@@ -172,19 +172,23 @@ const Content = ({ settings, user, posts, badgePosts }) => {
       <Paper className={styles.paper}>
         <MapContainer height={"60Vh"} settings={settings} />
       </Paper>
-      <BadgePost
-        image="panda.png"
-        name={user.displayName}
-        category="Animals"
-        badge="Giant Pandas"
-      />
       <BadgeCategoryPost
         image="beach.png"
         name={user.displayName}
         group="Hong Kong"
         category="Beaches"
       />
-      <ActivityPost />
+      {posts.map((post) => (
+        <ActivityPost
+          username={post.user.username}
+          date={post.createdAt}
+          title={post.title}
+          content={post.content}
+          activity={post.activity}
+          location={post.location ? post.location.name : null}
+          badge={post.badge ? post.badge.title : null}
+        />
+      ))}
       {badgePosts.map((post) => (
         <BadgePost
           key={post.badge.title}

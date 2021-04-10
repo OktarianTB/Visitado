@@ -11,7 +11,7 @@ const {
 const {
   addBadgeToUser,
   removeBadgeFromUser,
-  getBadgesForProfile
+  getBadgesForProfile,
 } = require("../controllers/badgeController");
 const auth = require("../controllers/authMiddleware");
 
@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.get("/location/:username", getLocationsForUser);
 router.post("/location", auth, addLocationToUser);
-router.get("/follow/:followUserId", auth, followUser); // make post
+//router.get("/follow/:followUserId", auth, followUser); // make post
 router.get("/:username", getUser);
 
 router.post("/update", auth, updateUser);

@@ -1,5 +1,4 @@
 const User = require("../models/userModel");
-const Follows = require("../models/followsModel");
 const createError = require("http-errors");
 
 const errorMessage = (next, message) => {
@@ -67,7 +66,7 @@ exports.updateUser = async (req, res, next) => {
       biography,
       location,
     };
-    console.log("here")
+    console.log("here");
     const updatedUser = await User.findByIdAndUpdate(req.userId, updatedInfo, {
       new: true,
       runValidators: true,
@@ -89,6 +88,7 @@ exports.updateUser = async (req, res, next) => {
   }
 };
 
+/*
 exports.followUser = async (req, res, next) => {
   try {
     const { followUserId } = req.params;
@@ -127,3 +127,4 @@ exports.followUser = async (req, res, next) => {
     return errorMessage(next, error.message);
   }
 };
+*/

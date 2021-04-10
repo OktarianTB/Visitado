@@ -16,7 +16,12 @@ exports.getPostsForUser = async (req, res, next) => {
       return errorMessage(next, "This user does not exist.");
     }
 
-    const posts = await Post.find({ user: user._id }).populate("badge");
+    const posts = await Post.find({ user: user._id })
+      .sort("-date")
+      .limit(5)
+      .populate({ path: "badge", select: "title" })
+      .populate({ path: "location", select: "name" })
+      .populate({ path: "user", select: "username" });
 
     res.status(200).json({
       status: "success",
@@ -50,6 +55,24 @@ exports.createPost = async (req, res, next) => {
     res.status(201).json({
       status: "success",
       data: savedPost,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.getPostFeed = async (req, res, next) => {
+  try {
+    const posts = await Post.find()
+      .sort("-date")
+      .limit(15)
+      .populate({ path: "badge", select: "title" })
+      .populate({ path: "location", select: "name" })
+      .populate({ path: "user", select: "username" });
+
+    res.status(200).json({
+      status: "success",
+      data: posts,
     });
   } catch (error) {
     return errorMessage(next, error.message);
