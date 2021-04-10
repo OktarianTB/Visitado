@@ -8,10 +8,10 @@ const ActivityPost = () => {
   return (
     <Paper className={styles.paper}>
       <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <Typography variant="h6">📍 The Peak, Hong Kong</Typography>
+        <Grid item xs={10}>
+          <Typography variant="h6">I saw pandas!</Typography>
         </Grid>
-        <Grid item xs={6} style={{ textAlign: "right" }}>
+        <Grid item xs={2} style={{ textAlign: "right" }}>
           <Typography variant="overline">27/03/2021</Typography>
         </Grid>
       </Grid>
@@ -20,8 +20,8 @@ const ActivityPost = () => {
         I just got back from a wonderful trip with my boyfriend. We had some
         wonderful views. Check these pictures out:
       </Typography>
+      <Typography variant="h6">📍 The Peak, Hong Kong</Typography>
       <br />
-      <ImageGrid />
     </Paper>
   );
 };

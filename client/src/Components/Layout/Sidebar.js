@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import UserContext from "../../Utils/UserContext";
 import { Link, useLocation } from "react-router-dom";
@@ -8,12 +7,11 @@ import {
   Drawer,
   List,
   Divider,
-  IconButton,
+  Typography,
   ListItem,
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core/";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import HomeIcon from "@material-ui/icons/Home";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExploreIcon from "@material-ui/icons/Explore";
@@ -21,14 +19,15 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import EmojiEventsIcon from "@material-ui/icons/EmojiEvents";
 
-const drawerWidth = 220;
+const drawerWidth = 230;
 
 const useStyles = makeStyles((theme) => ({
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "center",
     padding: "0 8px",
+    backgroundColor: "#ffb74d",
     ...theme.mixins.toolbar,
   },
   drawerPaper: {
@@ -39,17 +38,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
-    },
+    backgroundColor: "#ffcc80",
   },
   paper: {
     padding: theme.spacing(2),
@@ -57,23 +46,29 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
     flexDirection: "column",
   },
+  title: {},
 }));
 
-const Sidebar = ({ open, handleDrawerClose }) => {
+const Sidebar = () => {
   const classes = useStyles();
 
   return (
     <Drawer
       variant="permanent"
       classes={{
-        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        paper: classes.drawerPaper,
       }}
-      open={open}
+      open={true}
     >
       <div className={classes.toolbarIcon}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon />
-        </IconButton>
+        <Typography
+          component="h1"
+          variant="h5"
+          color="inherit"
+          className={classes.title}
+        >
+          Visitado
+        </Typography>
       </div>
       <Divider />
       <DrawerMenu />
@@ -103,7 +98,10 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/"
-          style={{ backgroundColor: path === "" ? "#e0e0e0" : "" }}
+          style={{
+            backgroundColor: path === "" ? "#f9bf72" : "",
+            paddingLeft: 25,
+          }}
         >
           <ListItemIcon>
             <HomeIcon />
@@ -115,7 +113,10 @@ const DrawerMenu = () => {
           button
           component={Link}
           to={`/profile/${userData.user.username}`}
-          style={{ backgroundColor: path === "profile" ? "#e0e0e0" : "" }}
+          style={{
+            backgroundColor: path === "profile" ? "#f9bf72" : "",
+            paddingLeft: 25,
+          }}
         >
           <ListItemIcon>
             <AccountCircleIcon />
@@ -127,7 +128,10 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/explore"
-          style={{ backgroundColor: path === "explore" ? "#e0e0e0" : "" }}
+          style={{
+            backgroundColor: path === "explore" ? "#f9bf72" : "",
+            paddingLeft: 25,
+          }}
         >
           <ListItemIcon>
             <ExploreIcon />
@@ -139,7 +143,10 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/badges"
-          style={{ backgroundColor: path === "badges" ? "#e0e0e0" : "" }}
+          style={{
+            backgroundColor: path === "badges" ? "#f9bf72" : "",
+            paddingLeft: 25,
+          }}
         >
           <ListItemIcon>
             <EmojiEventsIcon />
@@ -154,14 +161,22 @@ const DrawerMenu = () => {
           button
           component={Link}
           to="/settings"
-          style={{ backgroundColor: path === "settings" ? "#e0e0e0" : "" }}
+          style={{
+            backgroundColor: path === "settings" ? "#f9bf72" : "",
+            paddingLeft: 25,
+          }}
         >
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
           <ListItemText primary="Settings" />
         </ListItem>
-        <ListItem key="logout" button onClick={logout}>
+        <ListItem
+          key="logout"
+          button
+          onClick={logout}
+          style={{ paddingLeft: 25 }}
+        >
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>

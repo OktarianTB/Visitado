@@ -8,19 +8,15 @@ const errorMessage = (next, message) => {
 
 exports.getPostsForUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { username } = req.params;
 
-    if (!userId.match(/^[0-9a-fA-F]{24}$/)) {
-      return errorMessage(next, "This user does not exist.");
-    }
-
-    const user = await User.findById(userId);
+    const user = await User.findOne({ username });
 
     if (!user) {
       return errorMessage(next, "This user does not exist.");
     }
 
-    const posts = await Post.find({ user: userId });
+    const posts = await Post.find({ user: user._id }).populate("badge");
 
     res.status(200).json({
       status: "success",
@@ -33,18 +29,19 @@ exports.getPostsForUser = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   try {
-    const { title, content, activity, image_url, location, badge } = req.body;
+    const { title, content, activity, images, location, badge } = req.body;
 
     if (!title || !content) {
       return errorMessage(next, "Not all required fields have been entered.");
     }
 
     const newPost = new Post({
+      type: "post",
       title,
       content,
       user: req.userId,
       activity,
-      image_url,
+      images,
       location,
       badge,
     });

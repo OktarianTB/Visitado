@@ -12,7 +12,7 @@ import styles from "./Badge.module.css";
 const Badge = ({ title, image, url, width }) => {
   return (
     <Link to={url} className={styles.link}>
-      <Card style={{ maxWidth: width }}>
+      <Card style={{ maxWidth: width, borderBottom: "8px solid #ffcc80" }}>
         <CardActionArea>
           <CardMedia
             className={styles.media}

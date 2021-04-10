@@ -282,14 +282,6 @@ function sort_object(dict) {
   return items.map((item) => item[0]);
 }
 
-const getBestCategories = async (categories) => {
-  const bestCategories = categories.map(async (category) => {
-    const cat = await BadgeCategory.findById(category);
-    return cat;
-  });
-  return bestCategories;
-};
-
 exports.getBadgesForProfile = async (req, res, next) => {
   try {
     const { username } = req.params;
@@ -304,25 +296,38 @@ exports.getBadgesForProfile = async (req, res, next) => {
       "badge"
     );
 
-    const allBadgeCategories = {};
-    badges.forEach((badge) => {
-      const cat = badge.badge.badge_category;
-      if (cat in allBadgeCategories) {
-        allBadgeCategories[cat] = allBadgeCategories[cat] + 1;
-      } else {
-        allBadgeCategories[cat] = 1;
-      }
+    const categories = badges.map((badge) => badge.badge.badge_category);
+    const unique_categories = [...new Set(categories.map((item) => item))];
+
+    res.status(201).json({
+      status: "success",
+      data: unique_categories,
+    });
+  } catch (error) {
+    return errorMessage(next, error.message);
+  }
+};
+
+exports.getBadgePosts = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return errorMessage(next, "This user does not exist.");
+    }
+
+    const badges = await ObtainedBadge.find({ user: user._id }).populate({
+      path: "badge",
+      select: "title badge_category",
     });
 
-    const bestBadgeCategoriesIds = sort_object(allBadgeCategories);
-    await getBestCategories(bestBadgeCategoriesIds).then((bestCategories) => {
-      Promise.all(bestCategories).then((categories) => {
-        console.log(categories);
-        res.status(201).json({
-          status: "success",
-          data: categories,
-        });
-      });
+    const fullBadges = badges.slice(0, 5).map((badge) => {});
+
+    res.status(201).json({
+      status: "success",
+      data: badges.slice(0, 5),
     });
   } catch (error) {
     return errorMessage(next, error.message);

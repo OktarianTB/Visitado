@@ -35,6 +35,12 @@ const useStyles = makeStyles(() => ({
     marginBottom: 20,
     marginRight: 50,
   },
+  buttonColor: {
+    backgroundColor: "#ffb74d",
+    "&:hover": {
+      background: "#ffa726",
+    },
+  },
 }));
 
 const Page = () => {
@@ -281,9 +287,9 @@ const Page = () => {
             <div className={styles.submit}>
               <Button
                 variant="contained"
-                color="primary"
                 disableElevation
                 type="submit"
+                className={classes.buttonColor}
               >
                 Post
               </Button>

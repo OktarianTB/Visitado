@@ -23,5 +23,13 @@ const badgeSchema = new mongoose.Schema({
   },
 });
 
+badgeSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "badge_category",
+    select: "thumbnail title",
+  });
+  next();
+});
+
 const Badge = mongoose.model("Badge", badgeSchema);
 module.exports = Badge;

@@ -8,10 +8,10 @@ import { SnackbarProvider } from "notistack";
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: "#757ce8",
-      main: "#7e57c2",
-      dark: "#002884",
-      contrastText: "#fff",
+      light: "#ffcc80",
+      main: "#ffb74d",
+      dark: "#ffa726",
+      contrastText: "#000",
     },
     secondary: {
       light: "#ff7961",

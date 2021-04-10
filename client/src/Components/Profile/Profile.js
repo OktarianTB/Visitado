@@ -5,6 +5,7 @@ import Layout from "../Layout/Layout";
 import MapContainer from "../Maps/Map";
 import mapSettings from "../Maps/MapSettings";
 import BadgePost from "../Posts/BadgePost";
+import BadgeCategoryPost from "../Posts/BadgeCategoryPost";
 import ActivityPost from "../Posts/ActivityPost";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -23,6 +24,8 @@ const Page = ({ match }) => {
   const [badges, setBadges] = useState([]);
   const [finishedLocations, setFinishedLocations] = useState(false);
   const [finishedBadges, setFinishedBadges] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [badgePosts, setBadgePosts] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -56,13 +59,33 @@ const Page = ({ match }) => {
       setFinishedBadges(true);
     };
 
+    const getPosts = async () => {
+      const url = `http://127.0.0.1:5000/post/recent/${username}`;
+      await Axios.get(url)
+        .then((response) => {
+          setPosts(response.data.data);
+        })
+        .catch(() => {});
+    };
+
+    const getBadgePosts = async () => {
+      const url = `http://127.0.0.1:5000/post/badges/${username}`;
+      await Axios.get(url)
+        .then((response) => {
+          setBadgePosts(response.data.data);
+        })
+        .catch(() => {});
+    };
+
     getUser();
     getLocations();
     getBadges();
+    getPosts();
+    getBadgePosts();
   }, []);
 
   return user ? (
-    <div className={styles.content}>
+    <div>
       <Grid container spacing={3}>
         <Grid item xs={4}>
           <Sidebar user={user} badges={badges} />
@@ -74,6 +97,9 @@ const Page = ({ match }) => {
                 [{ color: "orange", locations, button: false }],
                 false
               )}
+              user={user}
+              posts={posts}
+              badgePosts={badgePosts}
             />
           ) : (
             <div></div>
@@ -140,14 +166,35 @@ const Sidebar = ({ user, badges }) => {
   );
 };
 
-const Content = ({ settings }) => {
+const Content = ({ settings, user, posts, badgePosts }) => {
   return (
     <div className={styles.contentDiv}>
       <Paper className={styles.paper}>
         <MapContainer height={"60Vh"} settings={settings} />
       </Paper>
-      <BadgePost />
+      <BadgePost
+        image="panda.png"
+        name={user.displayName}
+        category="Animals"
+        badge="Giant Pandas"
+      />
+      <BadgeCategoryPost
+        image="beach.png"
+        name={user.displayName}
+        group="Hong Kong"
+        category="Beaches"
+      />
       <ActivityPost />
+      {badgePosts.map((post) => (
+        <BadgePost
+          key={post.badge.title}
+          image={post.badge.badge_category.thumbnail}
+          name={user.displayName}
+          category={post.badge.badge_category.title}
+          badge={post.badge.title}
+          date={post.createdAt}
+        />
+      ))}
     </div>
   );
 };

@@ -17,9 +17,11 @@ const postSchema = new mongoose.Schema(
     activity: {
       type: String,
     },
-    image_url: {
-      type: String,
-    },
+    images: [
+      {
+        type: String,
+      },
+    ],
     location: {
       type: mongoose.Schema.ObjectId,
       ref: "Location",
