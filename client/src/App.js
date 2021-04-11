@@ -18,7 +18,7 @@ import {
   Login,
   Register,
   AddActivity,
-  AddBadges
+  AddBadges,
 } from "./Components";
 import UserContext from "./Utils/UserContext";
 import Axios from "axios";
@@ -92,7 +92,6 @@ const App = () => {
           <PrivateRoute path="/add-activity" exact component={AddActivity} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/admin/add-badges" exact component={AddBadges} />
           <Route component={NotFound} />
         </Switch>
       </UserContext.Provider>

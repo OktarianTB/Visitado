@@ -182,7 +182,7 @@ exports.createBadge = async (req, res, next) => {
       location,
     } = req.body;
 
-    if (!title || !description || !wikipedia_url || !badge_category) {
+    if (!title || !description || !badge_category) {
       return errorMessage(next, "Not all fields have been entered.");
     }
 

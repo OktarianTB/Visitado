@@ -191,12 +191,6 @@ const Content = ({ settings, user, posts }) => {
       <Paper className={styles.paper}>
         <MapContainer height={"60Vh"} settings={settings} />
       </Paper>
-      <BadgeCategoryPost
-        image="beach.png"
-        name={user.displayName}
-        group="Hong Kong"
-        category="Beaches"
-      />
       {posts.map((post) => {
         if (post.type === "post") {
           return (
@@ -229,5 +223,14 @@ const Content = ({ settings, user, posts }) => {
     </div>
   );
 };
+
+/*
+<BadgeCategoryPost
+        image="beach.png"
+        name={user.displayName}
+        group="Hong Kong"
+        category="Beaches"
+      />
+*/
 
 export default Profile;
