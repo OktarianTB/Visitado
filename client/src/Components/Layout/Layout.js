@@ -34,7 +34,6 @@ const Layout = ({ Page, location, match }) => {
   };
 
   useEffect(() => {
-    const url = "https://visitado-server.herokuapp.com";
     const checkLoggedIn = async () => {
       let token = localStorage.getItem("auth-token");
 
@@ -49,12 +48,12 @@ const Layout = ({ Page, location, match }) => {
         "x-auth-token": token,
       };
 
-      const tokenIsValid = await Axios.post(url + "/api/auth/validate", null, {
+      const tokenIsValid = await Axios.post("/api/auth/validate", null, {
         headers,
       });
 
       if (tokenIsValid.data) {
-        await Axios.get(url + "/api/auth/user", { headers })
+        await Axios.get("/api/auth/user", { headers })
           .then((response) => {
             setUserData({
               token,
