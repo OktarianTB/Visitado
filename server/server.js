@@ -53,10 +53,11 @@ app.use("/api/badge", badgeRouter);
 app.use("/api/post", postRouter);
 app.use("/api/location", locationRouter);
 
+/*
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404, "This endpoint does not exist."));
-});
+});*/
 
 // error handler
 app.use(function (err, req, res, next) {
