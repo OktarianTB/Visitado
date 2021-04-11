@@ -59,16 +59,14 @@ app.use(function (req, res, next) {
   next(createError(404, "This endpoint does not exist."));
 });*/
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
-  );
-  next();
-});
+if (process.env.NODE_ENV === "production") {
+  console.log("PRODUCTION");
+  app.use(express.static(path.join(__dirname + "/../client/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/../client/build/index.html"));
+  });
+}
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -77,14 +75,6 @@ app.use(function (err, req, res, next) {
     message: err.message,
   });
 });
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname + "/../client/build/index.html"));
-  });
-}
 
 // Start App
 const port = process.env.PORT || 5000;
