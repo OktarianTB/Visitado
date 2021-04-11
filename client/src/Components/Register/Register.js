@@ -93,7 +93,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (!usernameError && !passwordError && !displayNameError) {
-      const url = "http://127.0.0.1:5000/auth/register";
+      const url = "https://visitado-server.herokuapp.com/auth/register";
       const newUser = { username, password, displayName };
 
       await Axios.post(url, newUser)

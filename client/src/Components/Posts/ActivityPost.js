@@ -53,9 +53,8 @@ const ActivityPost = ({
       <br />
       <br />
       <Typography variant="body1">{content}</Typography>
-      <br />
-      {images && <ImageGrid images={images} />}
-      <br />
+      {images.length > 0 && <br />}
+      {images.length > 0 && <ImageGrid images={images} />}
       {badge && (
         <div>
           <br />
@@ -76,6 +75,7 @@ const ImageGrid = ({ images }) => {
           </GridListTile>
         ))}
       </GridList>
+      <br />
     </div>
   );
 };

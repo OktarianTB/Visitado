@@ -73,7 +73,7 @@ const Page = () => {
     e.preventDefault();
 
     if (!locationError && !displayNameError) {
-      const url = "http://127.0.0.1:5000/user/update";
+      const url = "https://visitado-server.herokuapp.com/user/update";
       const headers = {
         "x-auth-token": userData.token,
       };

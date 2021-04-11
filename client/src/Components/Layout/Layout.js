@@ -34,7 +34,7 @@ const Layout = ({ Page, location, match }) => {
   };
 
   useEffect(() => {
-    const url = "http://127.0.0.1:5000";
+    const url = "https://visitado-server.herokuapp.com";
     const checkLoggedIn = async () => {
       let token = localStorage.getItem("auth-token");
 

@@ -14,7 +14,7 @@ const mapSettings = (
     callback,
     markerLayers: layers.map((layer, index) => {
       return {
-        imageUrl: `http://maps.google.com/mapfiles/ms/micons/${layer.color}-dot.png`,
+        imageUrl: `/${layer.color}-pin.png`,
         data: {
           type: "FeatureCollection",
           features: layer.locations.map((loc) => {

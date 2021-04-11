@@ -48,7 +48,7 @@ const MapContainer = ({ height, settings }) => {
           source: sourceName,
           layout: {
             "icon-image": imageName,
-            "icon-size": 0.7,
+            "icon-size": 0.25,
             "icon-anchor": "bottom",
           },
         });
@@ -88,12 +88,12 @@ const MapContainer = ({ height, settings }) => {
 
       if (settings.displaySearch) {
         AddMarkers({
-          imageUrl: "http://maps.google.com/mapfiles/ms/micons/blue-dot.png",
+          imageUrl: "/orange-pin.png",
           data: {
             type: "FeatureCollection",
             features: [],
           },
-          imageName: "blueMarker",
+          imageName: "searchMarker",
           sourceName: "searchLayer",
           displayButton: true,
         });
@@ -182,7 +182,7 @@ const Popup = ({
 
   const addLocation = async () => {
     setAdded(true);
-    const url = "http://127.0.0.1:5000/user/location";
+    const url = "https://visitado-server.herokuapp.com/user/location";
     const headers = {
       "x-auth-token": userData.token,
     };

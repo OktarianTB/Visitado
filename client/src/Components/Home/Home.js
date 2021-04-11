@@ -16,7 +16,7 @@ const Page = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const url = `http://127.0.0.1:5000/post/all`;
+      const url = `https://visitado-server.herokuapp.com/post/all`;
       await Axios.get(url)
         .then((response) => {
           setPosts(response.data.data);

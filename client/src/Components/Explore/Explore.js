@@ -23,7 +23,7 @@ const Page = () => {
 
   useEffect(() => {
     const getBadgeLocations = async () => {
-      const url = `http://127.0.0.1:5000/badge/locations`;
+      const url = `https://visitado-server.herokuapp.com/badge/locations`;
       await Axios.get(url)
         .then((response) => {
           setBadgeLocations(response.data.data);
@@ -33,7 +33,7 @@ const Page = () => {
     };
 
     const getUserLocations = async () => {
-      const url = `http://127.0.0.1:5000/user/location/${userData.user.username}`;
+      const url = `https://visitado-server.herokuapp.com/user/location/${userData.user.username}`;
       await Axios.get(url)
         .then((response) => {
           setUserLocations(response.data.data);
@@ -54,7 +54,7 @@ const Page = () => {
           settings={mapSettings(
             [
               { color: "orange", locations: userLocations, button: false },
-              { color: "green", locations: badgeLocations, button: true },
+              { color: "blue", locations: badgeLocations, button: true },
             ],
             true,
             1,

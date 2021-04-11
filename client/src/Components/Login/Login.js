@@ -67,7 +67,7 @@ const LoginForm = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const url = "http://127.0.0.1:5000/auth/login";
+    const url = "https://visitado-server.herokuapp.com/auth/login";
     const user = { username, password };
 
     await Axios.post(url, user)

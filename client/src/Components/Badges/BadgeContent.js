@@ -40,7 +40,7 @@ const Page = ({ match, location }) => {
 
   useEffect(() => {
     const getBadgeList = async () => {
-      const url = `http://127.0.0.1:5000/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
+      const url = `https://visitado-server.herokuapp.com/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
       const headers = {
         "x-auth-token": userData.token,
       };
@@ -82,7 +82,7 @@ const Page = ({ match, location }) => {
         userData={userData}
         completed={completed}
         setBadgeList={setBadgeList}
-        url={`http://127.0.0.1:5000/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
+        url={`https://visitado-server.herokuapp.com/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
       />
       <br />
       <br />
@@ -229,7 +229,7 @@ const BadgeAccordion = ({
     event.stopPropagation();
 
     if (event.target.checked) {
-      const url = "http://127.0.0.1:5000/user/badge";
+      const url = "https://visitado-server.herokuapp.com/user/badge";
       const headers = {
         "x-auth-token": userData.token,
       };
@@ -254,7 +254,7 @@ const BadgeAccordion = ({
           });
         });
     } else {
-      const url = `http://127.0.0.1:5000/user/badge/${badgeId}`;
+      const url = `https://visitado-server.herokuapp.com/user/badge/${badgeId}`;
       const headers = {
         "x-auth-token": userData.token,
       };
