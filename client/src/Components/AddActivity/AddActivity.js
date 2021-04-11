@@ -11,6 +11,7 @@ import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
+import useStorage from "../../Firebase/useStorage";
 
 const AddActivity = () => {
   return <Layout Page={Page} />;
@@ -58,6 +59,10 @@ const Page = () => {
   const [postContent, setPostContent] = useState("");
   const [postContentError, setPostContentError] = useState("");
 
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [images, setImages] = useState([]);
+
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
 
@@ -71,7 +76,6 @@ const Page = () => {
 
   const handleLocationChange = (event, value) => {
     setPostLocation(value);
-    console.log(value);
   };
 
   const onChangePostTitle = (e) => {
@@ -96,6 +100,14 @@ const Page = () => {
     newLocations.push(loc);
     setLocations(newLocations);
     setPostLocation(loc);
+  };
+
+  const onChangeImage = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+
+    if (selectedFiles) {
+      setFiles(files.concat(selectedFiles));
+    }
   };
 
   useEffect(() => {
@@ -147,6 +159,7 @@ const Page = () => {
       content: postContent,
       location: postLocation ? postLocation._id : null,
       badge: badgeId,
+      images,
     };
     const url = "http://127.0.0.1:5000/post";
     const headers = {
@@ -172,132 +185,188 @@ const Page = () => {
   };
 
   return (
-    <Paper className={styles.paper}>
-      <div className={styles.title}>
-        <Typography variant="h4" component="h2" gutterBottom align="center">
-          Add Activity <CreateIcon />
-        </Typography>
-      </div>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={4}>
-          <Autocomplete
-            id="combo-box-demo"
-            openOnFocus
-            options={activities}
-            getOptionLabel={(act) => act}
-            className={classes.formControl}
-            onChange={handleActivityChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Select Activity"
-                variant="outlined"
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Autocomplete
-            id="combo-box-demo"
-            openOnFocus
-            value={postLocation}
-            options={locations}
-            getOptionLabel={(loc) => loc.name}
-            className={classes.formControl}
-            onChange={handleLocationChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Select one of my Locations"
-                variant="outlined"
-              />
-            )}
-          />
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Autocomplete
-            id="combo-box-demo"
-            openOnFocus
-            options={badges}
-            getOptionLabel={(badge) => badge.title}
-            className={classes.formControl}
-            onChange={handleBadgeChange}
-            renderInput={(params) => (
-              <TextField {...params} label="Select Badge" variant="outlined" />
-            )}
-          />
-        </Grid>
-      </Grid>
-      <Typography variant="subtitle1" align="center">
-        or add a location on the map
-      </Typography>
-      <br />
-      {finished ? (
-        <MapContainer
-          height={"30Vh"}
-          settings={mapSettings(
-            [{ color: "orange", locations, button: false }],
-            true,
-            2,
-            [0, 40],
-            onAddedLocation
-          )}
-        />
-      ) : (
-        <div></div>
-      )}
-      <br />
-      <form onSubmit={createPost}>
-        <TextField
-          label="Post Title"
-          id="outlined-margin-normal"
-          margin="normal"
-          variant="outlined"
-          value={postTitle}
-          onChange={onChangePostTitle}
-          fullWidth
-          className={styles.textfield}
-          error={postTitleError ? true : false}
-          helperText={postTitleError}
-        />
-        <TextField
-          label="Post Content"
-          id="outlined-margin-normal"
-          multiline
-          rows={3}
-          margin="normal"
-          variant="outlined"
-          value={postContent}
-          onChange={onChangePostContent}
-          fullWidth
-          error={postContentError ? true : false}
-          helperText={postContentError}
-        />
-
+    <div>
+      <Paper className={styles.paper}>
+        <div className={styles.title}>
+          <Typography variant="h4" component="h2" gutterBottom align="center">
+            Add Activity <CreateIcon />
+          </Typography>
+        </div>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <div className={styles.upload}>
-              <Button variant="contained" component="label">
-                Upload Images
-                <input type="file" hidden />
-              </Button>
-            </div>
+          <Grid item xs={12} sm={4}>
+            <Autocomplete
+              id="combo-box-demo"
+              openOnFocus
+              options={activities}
+              getOptionLabel={(act) => act}
+              className={classes.formControl}
+              onChange={handleActivityChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Activity"
+                  variant="outlined"
+                />
+              )}
+            />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <div className={styles.submit}>
-              <Button
-                variant="contained"
-                disableElevation
-                type="submit"
-                className={classes.buttonColor}
-              >
-                Post
-              </Button>
-            </div>
+          <Grid item xs={12} sm={4}>
+            <Autocomplete
+              id="combo-box-demo"
+              openOnFocus
+              value={postLocation}
+              options={locations}
+              getOptionLabel={(loc) => loc.name}
+              className={classes.formControl}
+              onChange={handleLocationChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select one of my Locations"
+                  variant="outlined"
+                />
+              )}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <Autocomplete
+              id="combo-box-demo"
+              openOnFocus
+              options={badges}
+              getOptionLabel={(badge) => badge.title}
+              className={classes.formControl}
+              onChange={handleBadgeChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Badge"
+                  variant="outlined"
+                />
+              )}
+            />
           </Grid>
         </Grid>
-      </form>
-    </Paper>
+        <Typography variant="subtitle1" align="center">
+          or add a location on the map
+        </Typography>
+        <br />
+        {finished ? (
+          <MapContainer
+            height={"30Vh"}
+            settings={mapSettings(
+              [{ color: "orange", locations, button: false }],
+              true,
+              2,
+              [0, 40],
+              onAddedLocation
+            )}
+          />
+        ) : (
+          <div></div>
+        )}
+        <br />
+        <form onSubmit={createPost}>
+          <TextField
+            label="Post Title"
+            id="outlined-margin-normal"
+            margin="normal"
+            variant="outlined"
+            value={postTitle}
+            onChange={onChangePostTitle}
+            fullWidth
+            className={styles.textfield}
+            error={postTitleError ? true : false}
+            helperText={postTitleError}
+          />
+          <TextField
+            label="Post Content"
+            id="outlined-margin-normal"
+            multiline
+            rows={3}
+            margin="normal"
+            variant="outlined"
+            value={postContent}
+            onChange={onChangePostContent}
+            fullWidth
+            error={postContentError ? true : false}
+            helperText={postContentError}
+          />
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <div className={styles.upload}>
+                <Button variant="contained" component="label">
+                  Upload Images
+                  <input
+                    type="file"
+                    hidden
+                    onChange={onChangeImage}
+                    multiple="multiple"
+                    accept="image/*"
+                  />
+                </Button>
+              </div>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <div className={styles.submit}>
+                <Button
+                  variant="contained"
+                  disableElevation
+                  type="submit"
+                  className={classes.buttonColor}
+                >
+                  Post
+                </Button>
+              </div>
+            </Grid>
+            {files.map((file, i) => (
+              <UploadImage
+                file={file}
+                images={images}
+                setImages={setImages}
+                uploadedFiles={uploadedFiles}
+                setUploadedFiles={setUploadedFiles}
+                key={`${file.name}${i}`}
+              />
+            ))}
+          </Grid>
+        </form>
+      </Paper>
+      <br />
+      <br />
+    </div>
+  );
+};
+
+const UploadImage = ({
+  file,
+  images,
+  setImages,
+  uploadedFiles,
+  setUploadedFiles,
+}) => {
+  const { progress, url } = useStorage(file, uploadedFiles);
+
+  useEffect(() => {
+    if (url) {
+      const allImages = images;
+      allImages.push(url);
+      setImages(allImages);
+
+      const allNames = uploadedFiles;
+      allNames.push(file.name);
+      setUploadedFiles(allNames);
+    }
+  }, [url]);
+
+  return (
+    <Grid item xs={12} key={file.name}>
+      <Typography variant="subtitle1">{file.name}</Typography>
+      <div
+        className={styles.progressBar}
+        style={{ width: progress + "%" }}
+      ></div>
+    </Grid>
   );
 };
 

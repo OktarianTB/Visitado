@@ -22,3 +22,9 @@
 .textfield {
   margin-bottom: 15px;
 }
+
+.progressBar {
+  margin-top: 10px;
+  height: 5px;
+  background-color: #ffcc80;
+}

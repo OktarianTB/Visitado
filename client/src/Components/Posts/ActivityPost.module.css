@@ -24,3 +24,9 @@
   text-decoration: none;
   color: black;
 }
+
+.postProfilePic {
+  max-width: 100px;
+  max-height: 100px;
+  display: block;
+}

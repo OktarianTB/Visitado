@@ -7,6 +7,10 @@ const errorMessage = (next, message) => {
   next(createError(401, message));
 };
 
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * max);
+};
+
 exports.registerUser = async (req, res, next) => {
   try {
     const { username, password, displayName } = req.body;
@@ -34,6 +38,7 @@ exports.registerUser = async (req, res, next) => {
       username,
       password: hashedPassword,
       displayName,
+      picture_url: `profile${getRandomInt(10)}.png`,
     });
     const savedUser = await newUser.save();
 

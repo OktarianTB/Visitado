@@ -318,16 +318,17 @@ exports.getBadgePosts = async (req, res, next) => {
       return errorMessage(next, "This user does not exist.");
     }
 
-    const badges = await ObtainedBadge.find({ user: user._id }).populate({
-      path: "badge",
-      select: "title badge_category",
-    });
-
-    const fullBadges = badges.slice(0, 5).map((badge) => {});
+    const badges = await ObtainedBadge.find({ user: user._id })
+      .sort("-createdAt")
+      .populate({
+        path: "badge",
+        select: "title badge_category",
+      })
+      .limit(5);
 
     res.status(201).json({
       status: "success",
-      data: badges.slice(0, 5),
+      data: badges,
     });
   } catch (error) {
     return errorMessage(next, error.message);

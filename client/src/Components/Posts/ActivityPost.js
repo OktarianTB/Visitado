@@ -13,6 +13,8 @@ const ActivityPost = ({
   activity,
   content,
   badge,
+  profile_picture,
+  images,
 }) => {
   const url = `/profile/${username}`;
   const d = new Date(date);
@@ -20,7 +22,14 @@ const ActivityPost = ({
   return (
     <Paper className={styles.paper}>
       <Grid container spacing={1}>
-        <Grid item xs={10}>
+        <Grid item xs={2}>
+          <img
+            src={`/${profile_picture}`}
+            className={styles.postProfilePic}
+            alt={username}
+          />
+        </Grid>
+        <Grid item xs={8}>
           <Typography
             variant="overline"
             component={Link}
@@ -29,6 +38,11 @@ const ActivityPost = ({
           >
             @{username}
           </Typography>
+          <Typography variant="h5">{title}</Typography>
+          <Typography variant="caption">
+            {location ? `📍 ${location} ` : ""}
+            {location && activity ? `● ${activity}` : activity ? activity : ""}
+          </Typography>
         </Grid>
         <Grid item xs={2} style={{ textAlign: "right" }}>
           <Typography variant="overline">
@@ -36,57 +50,34 @@ const ActivityPost = ({
           </Typography>
         </Grid>
       </Grid>
-      <Typography variant="h5">{title}</Typography>
-      <Typography variant="caption">
-        {location ? `📍 ${location} ` : ""}
-        {location && activity ? `● ${activity}` : activity ? activity : ""}
-      </Typography>
       <br />
       <br />
       <Typography variant="body1">{content}</Typography>
-
-      {badge ? (
+      <br />
+      {images && <ImageGrid images={images} />}
+      <br />
+      {badge && (
         <div>
           <br />
           <Typography variant="body2">Badge Progress: {badge}</Typography>
         </div>
-      ) : (
-        <div></div>
       )}
     </Paper>
   );
 };
 
-const ImageGrid = () => {
+const ImageGrid = ({ images }) => {
   return (
     <div className={styles.root}>
       <GridList className={styles.gridList} cols={2.5}>
-        {tileData.map((tile) => (
-          <GridListTile key={tile.img}>
-            <img src={tile.img} alt={tile.title} />
+        {images.map((image, i) => (
+          <GridListTile key={i}>
+            <img src={image} alt={`image-${i}`} />
           </GridListTile>
         ))}
       </GridList>
     </div>
   );
 };
-
-const tileData = [
-  {
-    img: "/hike1.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "/hike2.jpg",
-    title: "Image",
-    author: "author",
-  },
-  {
-    img: "/hike3.jpg",
-    title: "Image",
-    author: "author",
-  },
-];
 
 export default ActivityPost;

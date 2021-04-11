@@ -6,7 +6,10 @@
  "scripts": {
   "client": "cd client && npm start",
   "server": "cd server && npm start",
-  "start": "concurrently --kill-others \"npm run server\" \"npm run client\""
+  "start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+  "build": "cd client && npm run build",
+  "install-client": "cd client && npm install",
+  "heroku-postbuild": "npm run install-client && npm run build"
  },
  "keywords": [],
  "author": "Oktarian Tilney-Bassett, Joschua Mueller",

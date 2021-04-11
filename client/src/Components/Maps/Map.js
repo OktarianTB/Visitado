@@ -8,8 +8,7 @@ import { useSnackbar } from "notistack";
 import UserContext from "../../Utils/UserContext";
 import Axios from "axios";
 
-mapboxgl.accessToken =
-  "pk.eyJ1Ijoib2t0YXJpYW4iLCJhIjoiY2ttcTBtcDRkMHY0cjJ4cnY4d3NpNmxlMiJ9.tILyfF19GGlat3f44pEZRw";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
 const MapContainer = ({ height, settings }) => {
   const { userData } = useContext(UserContext);

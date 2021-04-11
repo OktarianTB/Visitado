@@ -26,6 +26,7 @@ const Page = ({ match }) => {
   const [finishedBadges, setFinishedBadges] = useState(false);
   const [posts, setPosts] = useState([]);
   const [badgePosts, setBadgePosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -63,7 +64,11 @@ const Page = ({ match }) => {
       const url = `http://127.0.0.1:5000/post/recent/${username}`;
       await Axios.get(url)
         .then((response) => {
-          setPosts(response.data.data);
+          const allPosts = response.data.data.map((post) => {
+            const newpost = { type: "post", ...post };
+            return newpost;
+          });
+          setPosts(allPosts);
         })
         .catch(() => {});
     };
@@ -72,7 +77,11 @@ const Page = ({ match }) => {
       const url = `http://127.0.0.1:5000/post/badges/${username}`;
       await Axios.get(url)
         .then((response) => {
-          setBadgePosts(response.data.data);
+          const allBadgePosts = response.data.data.map((post) => {
+            const newpost = { type: "badge", ...post };
+            return newpost;
+          });
+          setBadgePosts(allBadgePosts);
         })
         .catch(() => {});
     };
@@ -83,6 +92,16 @@ const Page = ({ match }) => {
     getPosts();
     getBadgePosts();
   }, []);
+
+  useEffect(() => {
+    let combined = posts.concat(badgePosts);
+
+    combined = combined.sort(function (a, b) {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    });
+
+    setAllPosts(combined);
+  }, [posts, badgePosts]);
 
   return user ? (
     <div>
@@ -98,8 +117,7 @@ const Page = ({ match }) => {
                 false
               )}
               user={user}
-              posts={posts}
-              badgePosts={badgePosts}
+              posts={allPosts}
             />
           ) : (
             <div></div>
@@ -123,30 +141,31 @@ const Sidebar = ({ user, badges }) => {
       <Typography variant="h4" gutterBottom>
         {user.displayName}
       </Typography>
-      <Typography variant="h6" gutterBottom>
-        @{user.username} ● 10 Friends
+      <Typography variant="subtitle1" gutterBottom>
+        @{user.username} ● 📍 {user.location}
       </Typography>
       <br />
       <Typography variant="body2" display="block">
         {user.biography}
       </Typography>
       <br />
-      <Typography variant="h6" display="block">
-        📍 Hong Kong
-      </Typography>
-      <br />
-      <Divider />
+      <Divider key="sidebar-div" />
       <br />
       <Typography variant="h6" gutterBottom>
         Badges
       </Typography>
       <br />
       <Grid container spacing={3}>
-        {badges.map((badge) => {
+        {badges.map((badge, i) => {
           const img = `/${badge.thumbnail}`;
           return (
-            <Grid item xs={6} key={badge.slug}>
-              <img src={img} className={styles.badgeImage} alt={badge.slug} />
+            <Grid item xs={6} key={i}>
+              <img
+                src={img}
+                className={styles.badgeImage}
+                alt={badge.slug}
+                key={badge.slug}
+              />
             </Grid>
           );
         })}
@@ -166,7 +185,7 @@ const Sidebar = ({ user, badges }) => {
   );
 };
 
-const Content = ({ settings, user, posts, badgePosts }) => {
+const Content = ({ settings, user, posts }) => {
   return (
     <div className={styles.contentDiv}>
       <Paper className={styles.paper}>
@@ -178,27 +197,35 @@ const Content = ({ settings, user, posts, badgePosts }) => {
         group="Hong Kong"
         category="Beaches"
       />
-      {posts.map((post) => (
-        <ActivityPost
-          username={post.user.username}
-          date={post.createdAt}
-          title={post.title}
-          content={post.content}
-          activity={post.activity}
-          location={post.location ? post.location.name : null}
-          badge={post.badge ? post.badge.title : null}
-        />
-      ))}
-      {badgePosts.map((post) => (
-        <BadgePost
-          key={post.badge.title}
-          image={post.badge.badge_category.thumbnail}
-          name={user.displayName}
-          category={post.badge.badge_category.title}
-          badge={post.badge.title}
-          date={post.createdAt}
-        />
-      ))}
+      {posts.map((post) => {
+        if (post.type === "post") {
+          return (
+            <ActivityPost
+              key={post.title}
+              profile_picture={post.user.picture_url}
+              username={post.user.username}
+              date={post.createdAt}
+              title={post.title}
+              content={post.content}
+              activity={post.activity}
+              location={post.location ? post.location.name : null}
+              badge={post.badge ? post.badge.title : null}
+              images={post.images}
+            />
+          );
+        } else if (post.type === "badge") {
+          return (
+            <BadgePost
+              key={post.badge.title}
+              image={post.badge.badge_category.thumbnail}
+              name={user.displayName}
+              category={post.badge.badge_category.title}
+              badge={post.badge.title}
+              date={post.createdAt}
+            />
+          );
+        }
+      })}
     </div>
   );
 };

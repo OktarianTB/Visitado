@@ -36,6 +36,8 @@ const Page = () => {
         <br />
         {posts.map((post) => (
           <ActivityPost
+            key={post.title}
+            profile_picture={post.user.picture_url}
             username={post.user.username}
             date={post.createdAt}
             title={post.title}
@@ -43,6 +45,7 @@ const Page = () => {
             activity={post.activity}
             location={post.location ? post.location.name : null}
             badge={post.badge ? post.badge.title : null}
+            images={post.images}
           />
         ))}
       </Container>

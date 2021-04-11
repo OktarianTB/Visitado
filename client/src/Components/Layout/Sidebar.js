@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    backgroundColor: "#ffcc80",
   },
   paper: {
     padding: theme.spacing(2),
@@ -46,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
     flexDirection: "column",
   },
-  title: {},
+  title: {
+    marginRight: 15,
+  },
 }));
 
 const Sidebar = () => {
@@ -61,16 +62,28 @@ const Sidebar = () => {
       open={true}
     >
       <div className={classes.toolbarIcon}>
-        <Typography
-          component="h1"
-          variant="h5"
-          color="inherit"
-          className={classes.title}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
         >
-          Visitado
-        </Typography>
+          <img
+            src="/logo-transparent.png"
+            style={{ maxWidth: 40, maxHeight: 40, marginRight: 20 }}
+          />
+          <Typography
+            component="h1"
+            variant="h5"
+            color="inherit"
+            className={classes.title}
+          >
+            Visitado
+          </Typography>
+        </div>
       </div>
-      <Divider />
+      <Divider key="divider1" />
       <DrawerMenu />
     </Drawer>
   );
@@ -91,8 +104,8 @@ const DrawerMenu = () => {
   };
 
   return (
-    <div>
-      <List>
+    <div style={{ backgroundColor: "#ffcc80", height: "100%" }}>
+      <List key="main">
         <ListItem
           key="home"
           button
@@ -103,10 +116,10 @@ const DrawerMenu = () => {
             paddingLeft: 25,
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon key="homeicon">
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary="Home" />
+          <ListItemText primary="Home" key="hometext" />
         </ListItem>
         <ListItem
           key="profile"
@@ -118,10 +131,10 @@ const DrawerMenu = () => {
             paddingLeft: 25,
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon key="profileicon">
             <AccountCircleIcon />
           </ListItemIcon>
-          <ListItemText primary="Profile" />
+          <ListItemText primary="Profile" key="profiletext" />
         </ListItem>
         <ListItem
           key="explore"
@@ -133,10 +146,10 @@ const DrawerMenu = () => {
             paddingLeft: 25,
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon key="exploreicon">
             <ExploreIcon />
           </ListItemIcon>
-          <ListItemText primary="Explore" />
+          <ListItemText primary="Explore" key="exploretext" />
         </ListItem>
         <ListItem
           key="badges"
@@ -148,14 +161,14 @@ const DrawerMenu = () => {
             paddingLeft: 25,
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon key="badgeicon">
             <EmojiEventsIcon />
           </ListItemIcon>
-          <ListItemText primary="Badges" />
+          <ListItemText primary="Badges" key="badgetext" />
         </ListItem>
       </List>
-      <Divider />
-      <List>
+      <Divider key="divider2" />
+      <List key="second">
         <ListItem
           key="settings"
           button
@@ -166,10 +179,10 @@ const DrawerMenu = () => {
             paddingLeft: 25,
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon key="settingsicon">
             <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary="Settings" key="settingstext" />
         </ListItem>
         <ListItem
           key="logout"
@@ -177,10 +190,10 @@ const DrawerMenu = () => {
           onClick={logout}
           style={{ paddingLeft: 25 }}
         >
-          <ListItemIcon>
+          <ListItemIcon key="logouticon">
             <ExitToAppIcon />
           </ListItemIcon>
-          <ListItemText primary="Log Out" />
+          <ListItemText primary="Log Out" key="logouttext" />
         </ListItem>
       </List>
     </div>

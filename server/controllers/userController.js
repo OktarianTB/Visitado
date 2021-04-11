@@ -55,9 +55,9 @@ exports.getFullUser = async (req, res, next) => {
 
 exports.updateUser = async (req, res, next) => {
   try {
-    const { displayName, biography, location } = req.body;
+    const { displayName, biography, location, picture_url } = req.body;
 
-    if (!displayName || !biography || !location) {
+    if (!displayName || !biography || !location || !picture_url) {
       return errorMessage(next, "Not all required fields have been entered.");
     }
 
@@ -65,8 +65,9 @@ exports.updateUser = async (req, res, next) => {
       displayName,
       biography,
       location,
+      picture_url,
     };
-    console.log("here");
+
     const updatedUser = await User.findByIdAndUpdate(req.userId, updatedInfo, {
       new: true,
       runValidators: true,

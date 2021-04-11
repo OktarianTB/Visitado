@@ -6,6 +6,7 @@ import {
   TextField,
   Container,
 } from "@material-ui/core/";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { useSnackbar } from "notistack";
 import styles from "./Settings.module.css";
 import Layout from "../Layout/Layout";
@@ -18,12 +19,16 @@ const Settings = () => {
 
 const Page = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData } = useContext(UserContext);
   const [displayName, setDisplayName] = useState(userData.user.displayName);
   const [displayNameError, setDisplayNameError] = useState("");
   const [biography, setBiography] = useState(userData.user.biography);
-  const [location, setLocation] = useState(userData.user.location);
+  const [locationName, setLocationName] = useState(userData.user.location);
   const [locationError, setLocationError] = useState("");
+  const [profilePicture, setProfilePicture] = useState({
+    name: `Profile Picture ${userData.user.picture_url.slice(7, 8)}`,
+    url: userData.user.picture_url,
+  });
 
   const handleClick = () => {
     enqueueSnackbar("Changes saved!", {
@@ -51,13 +56,17 @@ const Page = () => {
 
   const onChangeLocation = (e) => {
     const newLocation = e.target.value;
-    setLocation(newLocation);
+    setLocationName(newLocation);
 
     if (newLocation.length < 4 || newLocation.length > 20) {
       setLocationError("Location must be between 4 and 20 characters.");
     } else {
       setLocationError("");
     }
+  };
+
+  const onChangeProfilePicture = (event, value) => {
+    setProfilePicture(value);
   };
 
   const onSubmit = async (e) => {
@@ -68,18 +77,18 @@ const Page = () => {
       const headers = {
         "x-auth-token": userData.token,
       };
-      const newUserInfo = { displayName, biography, location };
+      const newUserInfo = {
+        displayName,
+        biography,
+        location: locationName,
+        picture_url: profilePicture.url,
+      };
 
       await Axios.post(url, newUserInfo, { headers })
         .then((response) => {
-          setUserData({
-            token: userData.token,
-            user: response.data.data,
-          });
+          window.location.reload();
         })
-        .catch(() => {
-          setUserData({ token: undefined, user: undefined });
-        });
+        .catch(() => {});
     }
   };
 
@@ -121,7 +130,7 @@ const Page = () => {
                 id="outlined-margin-normal"
                 margin="normal"
                 variant="outlined"
-                value={location}
+                value={locationName}
                 fullWidth
                 onChange={onChangeLocation}
                 error={locationError ? true : false}
@@ -139,6 +148,24 @@ const Page = () => {
                 value={biography}
                 fullWidth
                 onChange={onChangeBiography}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Autocomplete
+                id="combo-box-demo"
+                openOnFocus
+                options={profile_pictures}
+                getOptionLabel={(pp) => pp.name}
+                onChange={onChangeProfilePicture}
+                style={{ marginTop: 10 }}
+                value={profilePicture}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Select Profile Picture"
+                    variant="outlined"
+                  />
+                )}
               />
             </Grid>
             <Typography align="center">
@@ -159,5 +186,18 @@ const Page = () => {
     </Container>
   );
 };
+
+const profile_pictures = [
+  { name: "Profile Picture 0", url: "profile0.png" },
+  { name: "Profile Picture 1", url: "profile1.png" },
+  { name: "Profile Picture 2", url: "profile2.png" },
+  { name: "Profile Picture 3", url: "profile3.png" },
+  { name: "Profile Picture 4", url: "profile4.png" },
+  { name: "Profile Picture 5", url: "profile5.png" },
+  { name: "Profile Picture 6", url: "profile6.png" },
+  { name: "Profile Picture 7", url: "profile7.png" },
+  { name: "Profile Picture 8", url: "profile8.png" },
+  { name: "Profile Picture 9", url: "profile9.png" },
+];
 
 export default Settings;

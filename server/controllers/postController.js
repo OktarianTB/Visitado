@@ -17,11 +17,11 @@ exports.getPostsForUser = async (req, res, next) => {
     }
 
     const posts = await Post.find({ user: user._id })
-      .sort("-date")
+      .sort("-createdAt")
       .limit(5)
       .populate({ path: "badge", select: "title" })
       .populate({ path: "location", select: "name" })
-      .populate({ path: "user", select: "username" });
+      .populate({ path: "user", select: "username picture_url" });
 
     res.status(200).json({
       status: "success",
@@ -64,11 +64,11 @@ exports.createPost = async (req, res, next) => {
 exports.getPostFeed = async (req, res, next) => {
   try {
     const posts = await Post.find()
-      .sort("-date")
+      .sort("-createdAt")
       .limit(15)
       .populate({ path: "badge", select: "title" })
       .populate({ path: "location", select: "name" })
-      .populate({ path: "user", select: "username" });
+      .populate({ path: "user", select: "username picture_url" });
 
     res.status(200).json({
       status: "success",
