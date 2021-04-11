@@ -18,7 +18,6 @@ import {
   Login,
   Register,
   AddActivity,
-  AddBadges,
 } from "./Components";
 import UserContext from "./Utils/UserContext";
 import Axios from "axios";
@@ -28,8 +27,6 @@ const App = () => {
     token: undefined,
     user: undefined,
   });
-
-  const url = "https://visitado-server.herokuapp.com/";
 
   useEffect(() => {
     const checkLoggedIn = async () => {
@@ -46,12 +43,12 @@ const App = () => {
         "x-auth-token": token,
       };
 
-      const tokenIsValid = await Axios.post(url + "/auth/validate", null, {
+      const tokenIsValid = await Axios.post("/auth/validate", null, {
         headers,
       });
 
       if (tokenIsValid.data) {
-        await Axios.get(url + "/auth/user", { headers })
+        await Axios.get("/auth/user", { headers })
           .then((response) => {
             setUserData({
               token,

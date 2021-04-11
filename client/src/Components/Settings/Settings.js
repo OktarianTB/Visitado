@@ -73,7 +73,7 @@ const Page = () => {
     e.preventDefault();
 
     if (!locationError && !displayNameError) {
-      const url = "https://visitado-server.herokuapp.com/user/update";
+      const url = "/user/update";
       const headers = {
         "x-auth-token": userData.token,
       };

@@ -182,7 +182,7 @@ const Popup = ({
 
   const addLocation = async () => {
     setAdded(true);
-    const url = "https://visitado-server.herokuapp.com/user/location";
+    const url = "/user/location";
     const headers = {
       "x-auth-token": userData.token,
     };

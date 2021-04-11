@@ -30,7 +30,7 @@ const Page = ({ match }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      const url = `https://visitado-server.herokuapp.com/user/${username}`;
+      const url = `/user/${username}`;
       await Axios.get(url)
         .then((response) => {
           setUser(response.data.data);
@@ -41,7 +41,7 @@ const Page = ({ match }) => {
     };
 
     const getLocations = async () => {
-      const url = `https://visitado-server.herokuapp.com/user/location/${username}`;
+      const url = `/user/location/${username}`;
       await Axios.get(url)
         .then((response) => {
           setLocations(response.data.data);
@@ -51,7 +51,7 @@ const Page = ({ match }) => {
     };
 
     const getBadges = async () => {
-      const url = `https://visitado-server.herokuapp.com/user/badge/${username}`;
+      const url = `/user/badge/${username}`;
       await Axios.get(url)
         .then((response) => {
           setBadges(response.data.data);
@@ -61,7 +61,7 @@ const Page = ({ match }) => {
     };
 
     const getPosts = async () => {
-      const url = `https://visitado-server.herokuapp.com/post/recent/${username}`;
+      const url = `/post/recent/${username}`;
       await Axios.get(url)
         .then((response) => {
           const allPosts = response.data.data.map((post) => {
@@ -74,7 +74,7 @@ const Page = ({ match }) => {
     };
 
     const getBadgePosts = async () => {
-      const url = `https://visitado-server.herokuapp.com/post/badges/${username}`;
+      const url = `/post/badges/${username}`;
       await Axios.get(url)
         .then((response) => {
           const allBadgePosts = response.data.data.map((post) => {

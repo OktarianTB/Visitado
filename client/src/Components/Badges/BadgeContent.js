@@ -40,7 +40,7 @@ const Page = ({ match, location }) => {
 
   useEffect(() => {
     const getBadgeList = async () => {
-      const url = `https://visitado-server.herokuapp.com/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
+      const url = `/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
       const headers = {
         "x-auth-token": userData.token,
       };
@@ -82,7 +82,7 @@ const Page = ({ match, location }) => {
         userData={userData}
         completed={completed}
         setBadgeList={setBadgeList}
-        url={`https://visitado-server.herokuapp.com/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
+        url={`/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
       />
       <br />
       <br />
@@ -229,7 +229,7 @@ const BadgeAccordion = ({
     event.stopPropagation();
 
     if (event.target.checked) {
-      const url = "https://visitado-server.herokuapp.com/user/badge";
+      const url = "/user/badge";
       const headers = {
         "x-auth-token": userData.token,
       };
@@ -254,7 +254,7 @@ const BadgeAccordion = ({
           });
         });
     } else {
-      const url = `https://visitado-server.herokuapp.com/user/badge/${badgeId}`;
+      const url = `/user/badge/${badgeId}`;
       const headers = {
         "x-auth-token": userData.token,
       };

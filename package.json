@@ -2,22 +2,37 @@
  "name": "visitado",
  "version": "1.0.0",
  "description": "A location-based social network",
- "main": "index.js",
+ "main": "./server/server.js",
  "scripts": {
-  "client": "cd client && npm start",
-  "server": "cd server && npm start",
-  "start": "concurrently --kill-others \"npm run server\" \"npm run client\"",
-  "build-client": "cd client && npm run build",
-  "build-server": "cd server && npm run build",
+  "start": "node server/server.js",
+  "build": "cd client && npm run build",
   "install-client": "cd client && npm install",
-  "install-server": "cd server && npm install",
-  "heroku-postbuild": "npm run install-client && npm run build-client && npm run install-server && npm run build-server"
+  "heroku-postbuild": "npm run install-client && npm run build"
  },
  "keywords": [],
  "author": "Oktarian Tilney-Bassett, Joschua Mueller",
  "license": "MIT",
+ "homepage": "https://github.com/OktarianTB/visitado#readme",
  "devDependencies": {
   "concurrently": "3.5.1"
  },
- "homepage": "https://github.com/OktarianTB/visitado#readme"
+ "dependencies": {
+  "bcryptjs": "^2.4.3",
+  "cookie-parser": "~1.4.4",
+  "cors": "^2.8.5",
+  "debug": "~2.6.9",
+  "dotenv": "^8.2.0",
+  "ejs": "~2.6.1",
+  "express": "~4.16.1",
+  "http-errors": "~1.6.3",
+  "jsonwebtoken": "^8.5.1",
+  "mongoose": "^5.12.2",
+  "mongoose-slug-updater": "^3.3.0",
+  "mongoose-type-email": "^1.1.2",
+  "morgan": "~1.9.1",
+  "nodemon": "^2.0.7"
+ },
+ "engines": {
+  "node": "15.11.0"
+ }
 }

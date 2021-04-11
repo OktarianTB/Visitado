@@ -44,8 +44,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const base_url = "https://visitado-server.herokuapp.com/";
-
 const Page = () => {
   const classes = useStyles();
   const { userData } = useContext(UserContext);
@@ -114,7 +112,7 @@ const Page = () => {
 
   useEffect(() => {
     const getLocations = async () => {
-      const url = `${base_url}user/location/${userData.user.username}`;
+      const url = `/user/location/${userData.user.username}`;
       await Axios.get(url)
         .then((response) => {
           setLocations(response.data.data);
@@ -125,7 +123,7 @@ const Page = () => {
     };
 
     const getBadges = async () => {
-      const url = `${base_url}badge/all`;
+      const url = `/badge/all`;
       await Axios.get(url)
         .then((response) => {
           setBadges(response.data.data);
@@ -163,7 +161,7 @@ const Page = () => {
       badge: badgeId,
       images,
     };
-    const url = `${base_url}post`;
+    const url = `/post`;
     const headers = {
       "x-auth-token": userData.token,
     };

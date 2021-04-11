@@ -22,7 +22,7 @@ const Page = () => {
 
   useEffect(() => {
     const getBadgeList = async () => {
-      const url = `https://visitado-server.herokuapp.com/badge/group`;
+      const url = `/badge/group`;
       await Axios.get(url)
         .then((response) => {
           setBadgeList(response.data.data);

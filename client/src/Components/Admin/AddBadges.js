@@ -40,8 +40,8 @@ const AddBadges = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const urlLocation = "https://visitado-server.herokuapp.com/user/location";
-    const urlBadge = "https://visitado-server.herokuapp.com/badge/items";
+    const urlLocation = "/user/location";
+    const urlBadge = "/badge/items";
     const newLocation = {
       name: title,
       location: {
