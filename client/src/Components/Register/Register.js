@@ -93,7 +93,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (!usernameError && !passwordError && !displayNameError) {
-      const url = "/auth/register";
+      const url = "/api/auth/register";
       const newUser = { username, password, displayName };
 
       await Axios.post(url, newUser)

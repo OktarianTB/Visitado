@@ -49,12 +49,12 @@ const Layout = ({ Page, location, match }) => {
         "x-auth-token": token,
       };
 
-      const tokenIsValid = await Axios.post(url + "/auth/validate", null, {
+      const tokenIsValid = await Axios.post(url + "/api/auth/validate", null, {
         headers,
       });
 
       if (tokenIsValid.data) {
-        await Axios.get(url + "/auth/user", { headers })
+        await Axios.get(url + "/api/auth/user", { headers })
           .then((response) => {
             setUserData({
               token,

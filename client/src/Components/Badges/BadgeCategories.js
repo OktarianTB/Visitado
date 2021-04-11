@@ -23,7 +23,7 @@ const Page = ({ match, location }) => {
 
   useEffect(() => {
     const getBadgeList = async () => {
-      const url = `/badge/category/${badgeGroup.toLowerCase()}`;
+      const url = `/api/badge/category/${badgeGroup.toLowerCase()}`;
       await Axios.get(url)
         .then((response) => {
           setBadgeList(response.data.data);

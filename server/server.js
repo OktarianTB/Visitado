@@ -47,11 +47,11 @@ const badgeRouter = require("./routes/badgeRoute");
 const postRouter = require("./routes/postRoute");
 const locationRouter = require("./routes/locationRoute");
 
-app.use("/auth", authRouter);
-app.use("/user", usersRouter);
-app.use("/badge", badgeRouter);
-app.use("/post", postRouter);
-app.use("/location", locationRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/user", usersRouter);
+app.use("/api/badge", badgeRouter);
+app.use("/api/post", postRouter);
+app.use("/api/location", locationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

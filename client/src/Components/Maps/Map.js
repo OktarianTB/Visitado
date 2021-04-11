@@ -182,7 +182,7 @@ const Popup = ({
 
   const addLocation = async () => {
     setAdded(true);
-    const url = "/user/location";
+    const url = "/api/user/location";
     const headers = {
       "x-auth-token": userData.token,
     };

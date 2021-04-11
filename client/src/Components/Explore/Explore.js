@@ -23,7 +23,7 @@ const Page = () => {
 
   useEffect(() => {
     const getBadgeLocations = async () => {
-      const url = `/badge/locations`;
+      const url = `/api/badge/locations`;
       await Axios.get(url)
         .then((response) => {
           setBadgeLocations(response.data.data);
@@ -33,7 +33,7 @@ const Page = () => {
     };
 
     const getUserLocations = async () => {
-      const url = `/user/location/${userData.user.username}`;
+      const url = `/api/user/location/${userData.user.username}`;
       await Axios.get(url)
         .then((response) => {
           setUserLocations(response.data.data);

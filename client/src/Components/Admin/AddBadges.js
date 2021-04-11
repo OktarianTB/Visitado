@@ -40,8 +40,8 @@ const AddBadges = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const urlLocation = "/user/location";
-    const urlBadge = "/badge/items";
+    const urlLocation = "/api/user/location";
+    const urlBadge = "/api/badge/items";
     const newLocation = {
       name: title,
       location: {

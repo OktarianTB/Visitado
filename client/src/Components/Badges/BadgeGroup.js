@@ -22,7 +22,7 @@ const Page = () => {
 
   useEffect(() => {
     const getBadgeList = async () => {
-      const url = `/badge/group`;
+      const url = `/api/badge/group`;
       await Axios.get(url)
         .then((response) => {
           setBadgeList(response.data.data);

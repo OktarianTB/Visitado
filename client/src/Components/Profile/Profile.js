@@ -30,7 +30,7 @@ const Page = ({ match }) => {
 
   useEffect(() => {
     const getUser = async () => {
-      const url = `/user/${username}`;
+      const url = `/api/user/${username}`;
       await Axios.get(url)
         .then((response) => {
           setUser(response.data.data);
@@ -41,7 +41,7 @@ const Page = ({ match }) => {
     };
 
     const getLocations = async () => {
-      const url = `/user/location/${username}`;
+      const url = `/api/user/location/${username}`;
       await Axios.get(url)
         .then((response) => {
           setLocations(response.data.data);
@@ -51,7 +51,7 @@ const Page = ({ match }) => {
     };
 
     const getBadges = async () => {
-      const url = `/user/badge/${username}`;
+      const url = `/api/user/badge/${username}`;
       await Axios.get(url)
         .then((response) => {
           setBadges(response.data.data);
@@ -61,7 +61,7 @@ const Page = ({ match }) => {
     };
 
     const getPosts = async () => {
-      const url = `/post/recent/${username}`;
+      const url = `/api/post/recent/${username}`;
       await Axios.get(url)
         .then((response) => {
           const allPosts = response.data.data.map((post) => {
@@ -74,7 +74,7 @@ const Page = ({ match }) => {
     };
 
     const getBadgePosts = async () => {
-      const url = `/post/badges/${username}`;
+      const url = `/api/post/badges/${username}`;
       await Axios.get(url)
         .then((response) => {
           const allBadgePosts = response.data.data.map((post) => {

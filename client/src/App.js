@@ -43,12 +43,12 @@ const App = () => {
         "x-auth-token": token,
       };
 
-      const tokenIsValid = await Axios.post("/auth/validate", null, {
+      const tokenIsValid = await Axios.post("/api/auth/validate", null, {
         headers,
       });
 
       if (tokenIsValid.data) {
-        await Axios.get("/auth/user", { headers })
+        await Axios.get("/api/auth/user", { headers })
           .then((response) => {
             setUserData({
               token,

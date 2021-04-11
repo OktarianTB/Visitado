@@ -40,7 +40,7 @@ const Page = ({ match, location }) => {
 
   useEffect(() => {
     const getBadgeList = async () => {
-      const url = `/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
+      const url = `/api/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`;
       const headers = {
         "x-auth-token": userData.token,
       };
@@ -82,7 +82,7 @@ const Page = ({ match, location }) => {
         userData={userData}
         completed={completed}
         setBadgeList={setBadgeList}
-        url={`/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
+        url={`/api/badge/items/${badgeGroup.toLowerCase()}/${badgeCategory.toLowerCase()}`}
       />
       <br />
       <br />
@@ -229,7 +229,7 @@ const BadgeAccordion = ({
     event.stopPropagation();
 
     if (event.target.checked) {
-      const url = "/user/badge";
+      const url = "/api/user/badge";
       const headers = {
         "x-auth-token": userData.token,
       };
@@ -254,7 +254,7 @@ const BadgeAccordion = ({
           });
         });
     } else {
-      const url = `/user/badge/${badgeId}`;
+      const url = `/api/user/badge/${badgeId}`;
       const headers = {
         "x-auth-token": userData.token,
       };

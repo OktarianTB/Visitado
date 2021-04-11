@@ -73,7 +73,7 @@ const Page = () => {
     e.preventDefault();
 
     if (!locationError && !displayNameError) {
-      const url = "/user/update";
+      const url = "/api/user/update";
       const headers = {
         "x-auth-token": userData.token,
       };

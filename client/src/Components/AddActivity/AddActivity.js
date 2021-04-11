@@ -112,7 +112,7 @@ const Page = () => {
 
   useEffect(() => {
     const getLocations = async () => {
-      const url = `/user/location/${userData.user.username}`;
+      const url = `/api/user/location/${userData.user.username}`;
       await Axios.get(url)
         .then((response) => {
           setLocations(response.data.data);
@@ -123,7 +123,7 @@ const Page = () => {
     };
 
     const getBadges = async () => {
-      const url = `/badge/all`;
+      const url = `/api/badge/all`;
       await Axios.get(url)
         .then((response) => {
           setBadges(response.data.data);
@@ -161,7 +161,7 @@ const Page = () => {
       badge: badgeId,
       images,
     };
-    const url = `/post`;
+    const url = `/api/post`;
     const headers = {
       "x-auth-token": userData.token,
     };

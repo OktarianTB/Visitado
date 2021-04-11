@@ -16,7 +16,7 @@ const Page = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const url = `/post/all`;
+      const url = `/api/post/all`;
       await Axios.get(url)
         .then((response) => {
           setPosts(response.data.data);
