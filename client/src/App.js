@@ -4,6 +4,7 @@ import {
   Route,
   Switch,
   Redirect,
+  useHistory,
 } from "react-router-dom";
 import {
   BadgeGroup,
@@ -98,6 +99,12 @@ const App = () => {
 
 const PrivateRoute = ({ children, ...rest }) => {
   const { userData } = useContext(UserContext);
+  const history = useHistory();
+
+  if (!userData.user) {
+    let path = "/login";
+    history.push(path);
+  }
 
   return (
     <Route

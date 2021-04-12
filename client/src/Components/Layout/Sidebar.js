@@ -103,6 +103,8 @@ const DrawerMenu = ({ profileUrl }) => {
     history.push("/login");
   };
 
+  console.log(profileUrl);
+
   return (
     <div style={{ backgroundColor: "#ffcc80", height: "100%" }}>
       <List key="main">

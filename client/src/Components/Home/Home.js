@@ -3,7 +3,7 @@ import UserContext from "../../Utils/UserContext";
 import { Typography, Container } from "@material-ui/core/";
 import ActivityPost from "../Posts/ActivityPost";
 import Axios from "axios";
-
+import Login from "../Login/Login";
 import Layout from "../Layout/Layout";
 
 const Home = () => {
@@ -52,13 +52,5 @@ const Page = () => {
     </div>
   );
 };
-
-/* username,
-  date,
-  title,
-  location,
-  activity,
-  content,
-  badge,*/
 
 export default Home;
