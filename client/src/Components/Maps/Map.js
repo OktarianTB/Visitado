@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import styles from "./Map.module.css";
-import mapboxgl from "mapbox-gl";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import mapboxgl from "!mapbox-gl";
 import * as MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import { Typography, Button } from "@material-ui/core";
 import { useSnackbar } from "notistack";

@@ -11,3 +11,4 @@ export { default as Login } from "./Login/Login";
 export { default as Register } from "./Register/Register";
 export { default as AddActivity } from "./AddActivity/AddActivity";
 export { default as AddBadges } from "./Admin/AddBadges";
+export { default as EmptyLayout } from "./Layout/EmptyLayout";

@@ -53,20 +53,17 @@ app.use("/api/badge", badgeRouter);
 app.use("/api/post", postRouter);
 app.use("/api/location", locationRouter);
 
-/*
+app.use(express.static(path.join(__dirname, "../client/build")));
+
+app.get("*", (req, res) => {
+  console.log("here");
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404, "This endpoint does not exist."));
-});*/
-
-if (process.env.NODE_ENV === "production") {
-  console.log("PRODUCTION");
-  app.use(express.static(path.join(__dirname + "/../client/build")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname + "/../client/build/index.html"));
-  });
-}
+});
 
 // error handler
 app.use(function (err, req, res, next) {

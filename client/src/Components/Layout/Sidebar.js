@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidebar = () => {
+const Sidebar = ({ profileUrl }) => {
   const classes = useStyles();
 
   return (
@@ -84,15 +84,15 @@ const Sidebar = () => {
         </div>
       </div>
       <Divider key="divider1" />
-      <DrawerMenu />
+      <DrawerMenu profileUrl={profileUrl} />
     </Drawer>
   );
 };
 
-const DrawerMenu = () => {
+const DrawerMenu = ({ profileUrl }) => {
   const path = useLocation().pathname.split("/")[1];
   const history = useHistory();
-  const { userData, setUserData } = useContext(UserContext);
+  const { setUserData } = useContext(UserContext);
 
   const logout = () => {
     setUserData({
@@ -125,7 +125,7 @@ const DrawerMenu = () => {
           key="profile"
           button
           component={Link}
-          to={`/profile/${userData.user.username}`}
+          to={profileUrl}
           style={{
             backgroundColor: path === "profile" ? "#f9bf72" : "",
             paddingLeft: 25,

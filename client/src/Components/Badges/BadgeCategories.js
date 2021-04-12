@@ -77,7 +77,6 @@ const Content = ({ badgeList, path }) => {
     <div className={styles.content}>
       <Grid container spacing={3}>
         {badgeList.map(({ title, thumbnail, slug }) => {
-          console.log(slug);
           return (
             <Grid item xs={12} sm={4} key={title} style={{ marginBottom: 30 }}>
               <Badge

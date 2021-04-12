@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container, CssBaseline } from "@material-ui/core/";
 import { withRouter, useHistory } from "react-router-dom";
@@ -27,6 +27,7 @@ const Layout = ({ Page, location, match }) => {
   const classes = useStyles();
   const history = useHistory();
   const { userData, setUserData } = useContext(UserContext);
+  const [profileUrl, setProfileUrl] = useState("/");
 
   const redirectToPage = () => {
     let path = "/add-activity";
@@ -59,6 +60,7 @@ const Layout = ({ Page, location, match }) => {
               token,
               user: response.data.data,
             });
+            setProfileUrl(`/profile/${response.data.data.username}`);
           })
           .catch(() => {
             setUserData({ token: undefined, user: undefined });
@@ -76,7 +78,7 @@ const Layout = ({ Page, location, match }) => {
   return userData.user ? (
     <div className={classes.root}>
       <CssBaseline />
-      <Sidebar />
+      <Sidebar profileUrl={profileUrl} />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
