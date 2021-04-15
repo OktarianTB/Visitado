@@ -28,6 +28,10 @@ const activities = [
   "Home",
   "Friends",
   "Family",
+  "Vacation",
+  "Watersports",
+  "Climbing",
+  "Food",
 ];
 
 const useStyles = makeStyles(() => ({

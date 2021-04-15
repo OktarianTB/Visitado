@@ -201,13 +201,7 @@ const Popup = ({
         });
         callback(response);
       })
-      .catch(() => {
-        enqueueSnackbar(`Unable to add ${name} to your locations.`, {
-          variant: "info",
-          preventDuplicate: true,
-          autoHideDuration: 2000,
-        });
-      });
+      .catch(() => {});
   };
 
   return (
