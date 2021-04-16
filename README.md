@@ -1,10 +1,7 @@
 # Visitado
 
-### Authors
-
-
 ### Overview
-Visitado is a location-based social network at the intersection between regular social networks such as Facebook, location-based social networks like Yelp or TripAdvisor, and location-based games such as PokemonGo.
+Visitado brings a whole new layer of excitement to local and international travel by combining elements of gamification and social media to encourage users to explore new places.
 
 This project was created for HackUST 2021!
 
